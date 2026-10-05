@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.data/
+test-results/
+playwright-report/
+next-env.d.ts
+*.tsbuildinfo
+.env*.local
+
+# Source PDFs may contain student personal data — keep them out of the repo
+*.pdf

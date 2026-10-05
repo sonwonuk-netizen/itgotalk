@@ -1,0 +1,16 @@
+﻿order,skill_id,book,week,name,pattern,operand,hint,time_rule,time_limit_sec,practice_required,set_pages
+1,ADD_P1_INTU,SA,1,+1 직관,intuition,1,"더하기 1은 다음 수. 1 다음 2, 2 다음 3…",per_set,12,3,1|2
+2,ADD_P1_COMM,SA,1,+1 교환법칙,commutative,1,덧셈은 순서를 바꿔도 같아요. 2+1=1+2,per_set,12,3,3|4
+3,ADD_P2_INTRO,SA,1,+2 도입,intro,2,"더하기 2는 두 칸 간 수. 2→→4, 3→→5",per_set,12,3,5|6
+4,ADD_P2_INTU,SA,1,+2 직관,intuition,2,"더하기 2는 두 칸 간 수. 2→→4, 3→→5",per_set,12,3,7|8
+5,ADD_P2_COMM,SA,1,+2 교환법칙,commutative,2,3+2=2+3,per_set,12,3,9|10
+6,ADD_P3_INTRO,SA,1,+3 도입,intro,3,"더하기 3은 세 칸 간 수. 2→→→5, 3→→→6",per_set,12,3,11|12
+7,ADD_P3_INTU,SA,1,+3 직관,intuition,3,"더하기 3은 세 칸 간 수. 2→→→5, 3→→→6",per_set,12,3,13|14
+8,ADD_P3_COMM,SA,1,+3 교환법칙,commutative,3,4+3=3+4,per_set,12,3,15|16
+9,ADD_P4_INTRO,SA,1,+4 도입,intro,4,"더하기 4는 네 칸 간 수. 2→→→→6, 3→→→→7",per_set,12,3,17|18
+10,ADD_P4_INTU,SA,1,+4 직관,intuition,4,"더하기 4는 네 칸 간 수. 2→→→→6, 3→→→→7",per_set,12,3,19|20
+11,ADD_P4_COMM,SA,1,+4 교환법칙,commutative,4,4+3=3+4,per_set,12,3,21|22
+12,ADD_P5_INTRO,SA,1,+5 도입,intro,5,"더하기 5는 다섯 칸 간 수. 2→→→→→7, 3→→→→→8",per_set,12,3,23|24
+13,ADD_P5_INTU,SA,1,+5 직관,intuition,5,더하기 5는 다섯 칸 간 수.,per_set,12,3,25
+14,ADD_P5_COMM,SA,1,+5 교환법칙,commutative,5,5+2=2+5,per_set,12,3,26|27
+15,ADD_COMP10,SA,1,10의 보수,complement10,,"더해서 10이 되는 짝을 찾아요. 9와 1, 8과 2…",per_set,12,3,28|29

@@ -1,0 +1,4 @@
+track_id,order,name,description,icon,has_diagnostic
+add,1,덧셈과 뺄셈,10 이하 덧셈부터 한 단계씩,/site/icon-addsub.png,true
+times,2,구구단,2단부터 9단까지 곱셈구구,/site/icon-muldiv.png,true
+tap,3,1~9 빨리 누르기,숫자를 1부터 9까지 순서대로 빠르게,/site/icon-tap.svg,false

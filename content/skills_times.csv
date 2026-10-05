@@ -1,0 +1,11 @@
+order,skill_id,track,book,week,name,pattern,operand,hint,time_rule,time_limit_sec,practice_required,set_pages
+101,TIMES_2,times,SC,29,구구단 2단,times_table,2,"2단은 2씩 커져요. 2, 4, 6, 8, 10…",per_set,20,3,1|2
+102,TIMES_5,times,SC,29,구구단 5단,times_table,5,"5단은 5씩 커져요. 5, 10, 15, 20, 25…",per_set,20,3,3|4
+103,TIMES_3,times,SC,29,구구단 3단,times_table,3,"3단은 3씩 커져요. 3, 6, 9, 12, 15…",per_set,20,3,5|6
+104,TIMES_4,times,SC,29,구구단 4단,times_table,4,"4단은 4씩 커져요. 4, 8, 12, 16, 20…",per_set,20,3,7|8
+105,TIMES_MIX_A,times,SC,31,2·5·3·4단 섞어서,times_mixed,,"섞여 나와도 몇 단인지 먼저 보고, 그 단을 떠올려요.",per_set,20,3,9
+106,TIMES_6,times,SC,30,구구단 6단,times_table,6,"6단은 6씩 커져요. 6, 12, 18, 24, 30…",per_set,20,3,10|11
+107,TIMES_9,times,SC,30,구구단 9단,times_table,9,"9단은 9씩 커져요. 9, 18, 27, 36, 45…",per_set,20,3,12|13
+108,TIMES_7,times,SC,30,구구단 7단,times_table,7,"7단은 7씩 커져요. 7, 14, 21, 28, 35…",per_set,20,3,14|15
+109,TIMES_8,times,SC,30,구구단 8단,times_table,8,"8단은 8씩 커져요. 8, 16, 24, 32, 40…",per_set,20,3,16|17
+110,TIMES_MIX_B,times,SC,31,6·9·7·8단 섞어서,times_mixed,,"섞여 나와도 몇 단인지 먼저 보고, 그 단을 떠올려요.",per_set,20,3,18

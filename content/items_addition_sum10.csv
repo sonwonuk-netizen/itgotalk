@@ -1,0 +1,175 @@
+﻿set_id,skill_id,page,order,a,op,b,blank,answer,note
+SA-P01,ADD_P1_INTU,1,1,1,+,1,result,2,
+SA-P01,ADD_P1_INTU,1,2,2,+,1,result,3,
+SA-P01,ADD_P1_INTU,1,3,3,+,1,result,4,
+SA-P01,ADD_P1_INTU,1,4,4,+,1,result,5,
+SA-P01,ADD_P1_INTU,1,5,5,+,1,result,6,
+SA-P02,ADD_P1_INTU,2,1,6,+,1,result,7,
+SA-P02,ADD_P1_INTU,2,2,7,+,1,result,8,
+SA-P02,ADD_P1_INTU,2,3,8,+,1,result,9,
+SA-P02,ADD_P1_INTU,2,4,9,+,1,result,10,
+SA-P03,ADD_P1_COMM,3,1,2,+,1,result,3,
+SA-P03,ADD_P1_COMM,3,2,1,+,2,result,3,
+SA-P03,ADD_P1_COMM,3,3,3,+,1,result,4,
+SA-P03,ADD_P1_COMM,3,4,1,+,3,result,4,
+SA-P03,ADD_P1_COMM,3,5,4,+,1,result,5,
+SA-P03,ADD_P1_COMM,3,6,1,+,4,result,5,
+SA-P03,ADD_P1_COMM,3,7,5,+,1,result,6,
+SA-P03,ADD_P1_COMM,3,8,1,+,5,result,6,
+SA-P04,ADD_P1_COMM,4,1,6,+,1,result,7,
+SA-P04,ADD_P1_COMM,4,2,1,+,6,result,7,
+SA-P04,ADD_P1_COMM,4,3,7,+,1,result,8,
+SA-P04,ADD_P1_COMM,4,4,1,+,7,result,8,
+SA-P04,ADD_P1_COMM,4,5,8,+,1,result,9,
+SA-P04,ADD_P1_COMM,4,6,1,+,8,result,9,
+SA-P04,ADD_P1_COMM,4,7,9,+,1,result,10,
+SA-P04,ADD_P1_COMM,4,8,1,+,9,result,10,
+SA-P05,ADD_P2_INTRO,5,1,2,+,1,result,3,
+SA-P05,ADD_P2_INTRO,5,2,2,+,2,result,4,
+SA-P05,ADD_P2_INTRO,5,3,3,+,1,result,4,
+SA-P05,ADD_P2_INTRO,5,4,3,+,2,result,5,
+SA-P05,ADD_P2_INTRO,5,5,4,+,1,result,5,
+SA-P05,ADD_P2_INTRO,5,6,4,+,2,result,6,
+SA-P05,ADD_P2_INTRO,5,7,5,+,1,result,6,
+SA-P05,ADD_P2_INTRO,5,8,5,+,2,result,7,
+SA-P06,ADD_P2_INTRO,6,1,6,+,1,result,7,
+SA-P06,ADD_P2_INTRO,6,2,6,+,2,result,8,
+SA-P06,ADD_P2_INTRO,6,3,7,+,1,result,8,
+SA-P06,ADD_P2_INTRO,6,4,7,+,2,result,9,
+SA-P06,ADD_P2_INTRO,6,5,8,+,1,result,9,
+SA-P06,ADD_P2_INTRO,6,6,8,+,2,result,10,
+SA-P06,ADD_P2_INTRO,6,7,9,+,1,result,10,
+SA-P07,ADD_P2_INTU,7,1,2,+,2,result,4,
+SA-P07,ADD_P2_INTU,7,2,3,+,2,result,5,
+SA-P07,ADD_P2_INTU,7,3,4,+,2,result,6,
+SA-P07,ADD_P2_INTU,7,4,5,+,2,result,7,
+SA-P07,ADD_P2_INTU,7,5,6,+,2,result,8,
+SA-P08,ADD_P2_INTU,8,1,4,+,2,result,6,
+SA-P08,ADD_P2_INTU,8,2,5,+,2,result,7,
+SA-P08,ADD_P2_INTU,8,3,6,+,2,result,8,
+SA-P08,ADD_P2_INTU,8,4,7,+,2,result,9,
+SA-P08,ADD_P2_INTU,8,5,8,+,2,result,10,
+SA-P09,ADD_P2_COMM,9,1,2,+,2,result,4,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,2,3,+,2,result,5,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,3,2,+,3,result,5,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,4,4,+,2,result,6,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,5,2,+,4,result,6,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,6,5,+,2,result,7,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P09,ADD_P2_COMM,9,7,2,+,5,result,7,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,1,5,+,2,result,7,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,2,2,+,5,result,7,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,3,6,+,2,result,8,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,4,2,+,6,result,8,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,5,7,+,2,result,9,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,6,2,+,7,result,9,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,7,8,+,2,result,10,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P10,ADD_P2_COMM,10,8,2,+,8,result,10,원본 정답 표기 라벨 p11/p12 → p9/p10으로 정정
+SA-P11,ADD_P3_INTRO,11,1,2,+,2,result,4,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,2,2,+,3,result,5,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,3,3,+,3,result,6,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,4,4,+,2,result,6,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,5,4,+,3,result,7,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,6,5,+,2,result,7,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P11,ADD_P3_INTRO,11,7,5,+,3,result,8,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,1,5,+,2,result,7,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,2,5,+,3,result,8,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,3,6,+,2,result,8,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,4,6,+,3,result,9,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,5,7,+,2,result,9,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P12,ADD_P3_INTRO,12,6,7,+,3,result,10,원본 안내문 'P13~14' 중복 → p11~12로 정정
+SA-P13,ADD_P3_INTU,13,1,1,+,3,result,4,
+SA-P13,ADD_P3_INTU,13,2,2,+,3,result,5,
+SA-P13,ADD_P3_INTU,13,3,3,+,3,result,6,
+SA-P13,ADD_P3_INTU,13,4,4,+,3,result,7,
+SA-P13,ADD_P3_INTU,13,5,5,+,3,result,8,
+SA-P14,ADD_P3_INTU,14,1,3,+,3,result,6,
+SA-P14,ADD_P3_INTU,14,2,4,+,3,result,7,
+SA-P14,ADD_P3_INTU,14,3,5,+,3,result,8,
+SA-P14,ADD_P3_INTU,14,4,6,+,3,result,9,
+SA-P14,ADD_P3_INTU,14,5,7,+,3,result,10,
+SA-P15,ADD_P3_COMM,15,1,3,+,3,result,6,
+SA-P15,ADD_P3_COMM,15,2,4,+,3,result,7,
+SA-P15,ADD_P3_COMM,15,3,3,+,4,result,7,
+SA-P15,ADD_P3_COMM,15,4,5,+,3,result,8,
+SA-P15,ADD_P3_COMM,15,5,3,+,5,result,8,
+SA-P15,ADD_P3_COMM,15,6,6,+,3,result,9,
+SA-P15,ADD_P3_COMM,15,7,3,+,6,result,9,
+SA-P16,ADD_P3_COMM,16,1,4,+,3,result,7,
+SA-P16,ADD_P3_COMM,16,2,3,+,4,result,7,
+SA-P16,ADD_P3_COMM,16,3,5,+,3,result,8,
+SA-P16,ADD_P3_COMM,16,4,3,+,5,result,8,
+SA-P16,ADD_P3_COMM,16,5,6,+,3,result,9,
+SA-P16,ADD_P3_COMM,16,6,3,+,6,result,9,
+SA-P16,ADD_P3_COMM,16,7,7,+,3,result,10,
+SA-P16,ADD_P3_COMM,16,8,3,+,7,result,10,
+SA-P17,ADD_P4_INTRO,17,1,4,+,1,result,5,
+SA-P17,ADD_P4_INTRO,17,2,1,+,4,result,5,
+SA-P17,ADD_P4_INTRO,17,3,2,+,4,result,6,
+SA-P17,ADD_P4_INTRO,17,4,3,+,4,result,7,
+SA-P17,ADD_P4_INTRO,17,5,4,+,4,result,8,
+SA-P17,ADD_P4_INTRO,17,6,5,+,4,result,9,
+SA-P18,ADD_P4_INTRO,18,1,2,+,4,result,6,
+SA-P18,ADD_P4_INTRO,18,2,3,+,4,result,7,
+SA-P18,ADD_P4_INTRO,18,3,4,+,4,result,8,
+SA-P18,ADD_P4_INTRO,18,4,5,+,4,result,9,
+SA-P18,ADD_P4_INTRO,18,5,6,+,4,result,10,
+SA-P19,ADD_P4_INTU,19,1,1,+,4,result,5,
+SA-P19,ADD_P4_INTU,19,2,2,+,4,result,6,
+SA-P19,ADD_P4_INTU,19,3,3,+,4,result,7,
+SA-P19,ADD_P4_INTU,19,4,4,+,4,result,8,
+SA-P19,ADD_P4_INTU,19,5,5,+,4,result,9,
+SA-P20,ADD_P4_INTU,20,1,3,+,4,result,7,
+SA-P20,ADD_P4_INTU,20,2,4,+,4,result,8,
+SA-P20,ADD_P4_INTU,20,3,5,+,4,result,9,
+SA-P20,ADD_P4_INTU,20,4,6,+,4,result,10,
+SA-P21,ADD_P4_COMM,21,1,1,+,4,result,5,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P21,ADD_P4_COMM,21,2,4,+,1,result,5,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P21,ADD_P4_COMM,21,3,2,+,4,result,6,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P21,ADD_P4_COMM,21,4,4,+,2,result,6,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P21,ADD_P4_COMM,21,5,3,+,4,result,7,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P21,ADD_P4_COMM,21,6,4,+,3,result,7,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P22,ADD_P4_COMM,22,1,4,+,4,result,8,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P22,ADD_P4_COMM,22,2,5,+,4,result,9,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P22,ADD_P4_COMM,22,3,4,+,5,result,9,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P22,ADD_P4_COMM,22,4,6,+,4,result,10,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P22,ADD_P4_COMM,22,5,4,+,6,result,10,원본 p21~22가 p15~16(+3)과 중복되어 +4 교환법칙으로 새로 작성함 — 검수 필요
+SA-P23,ADD_P5_INTRO,23,1,5,+,1,result,6,
+SA-P23,ADD_P5_INTRO,23,2,1,+,5,result,6,
+SA-P23,ADD_P5_INTRO,23,3,2,+,5,result,7,
+SA-P23,ADD_P5_INTRO,23,4,3,+,5,result,8,
+SA-P23,ADD_P5_INTRO,23,5,4,+,5,result,9,
+SA-P23,ADD_P5_INTRO,23,6,5,+,5,result,10,
+SA-P24,ADD_P5_INTRO,24,1,2,+,5,result,7,
+SA-P24,ADD_P5_INTRO,24,2,3,+,5,result,8,
+SA-P24,ADD_P5_INTRO,24,3,4,+,5,result,9,
+SA-P24,ADD_P5_INTRO,24,4,5,+,5,result,10,
+SA-P25,ADD_P5_INTU,25,1,1,+,5,result,6,
+SA-P25,ADD_P5_INTU,25,2,2,+,5,result,7,
+SA-P25,ADD_P5_INTU,25,3,3,+,5,result,8,
+SA-P25,ADD_P5_INTU,25,4,4,+,5,result,9,
+SA-P25,ADD_P5_INTU,25,5,5,+,5,result,10,
+SA-P26,ADD_P5_COMM,26,1,5,+,1,result,6,
+SA-P26,ADD_P5_COMM,26,2,1,+,5,result,6,
+SA-P26,ADD_P5_COMM,26,3,5,+,2,result,7,
+SA-P26,ADD_P5_COMM,26,4,2,+,5,result,7,
+SA-P26,ADD_P5_COMM,26,5,5,+,3,result,8,
+SA-P26,ADD_P5_COMM,26,6,3,+,5,result,8,
+SA-P26,ADD_P5_COMM,26,7,5,+,4,result,9,
+SA-P26,ADD_P5_COMM,26,8,4,+,5,result,9,
+SA-P27,ADD_P5_COMM,27,1,5,+,2,result,7,
+SA-P27,ADD_P5_COMM,27,2,2,+,5,result,7,
+SA-P27,ADD_P5_COMM,27,3,5,+,3,result,8,
+SA-P27,ADD_P5_COMM,27,4,3,+,5,result,8,
+SA-P27,ADD_P5_COMM,27,5,5,+,4,result,9,
+SA-P27,ADD_P5_COMM,27,6,4,+,5,result,9,
+SA-P27,ADD_P5_COMM,27,7,5,+,5,result,10,
+SA-P28,ADD_COMP10,28,1,9,+,1,operand2,1,표시: a + □ = 10
+SA-P28,ADD_COMP10,28,2,8,+,2,operand2,2,표시: a + □ = 10
+SA-P28,ADD_COMP10,28,3,7,+,3,operand2,3,표시: a + □ = 10
+SA-P28,ADD_COMP10,28,4,6,+,4,operand2,4,표시: a + □ = 10
+SA-P28,ADD_COMP10,28,5,5,+,5,operand2,5,표시: a + □ = 10
+SA-P29,ADD_COMP10,29,1,5,+,5,operand2,5,표시: a + □ = 10
+SA-P29,ADD_COMP10,29,2,4,+,6,operand2,6,표시: a + □ = 10
+SA-P29,ADD_COMP10,29,3,3,+,7,operand2,7,표시: a + □ = 10
+SA-P29,ADD_COMP10,29,4,2,+,8,operand2,8,표시: a + □ = 10
+SA-P29,ADD_COMP10,29,5,1,+,9,operand2,9,표시: a + □ = 10

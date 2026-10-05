@@ -1,0 +1,4 @@
+order,skill_id,track,book,week,name,pattern,operand,hint,time_rule,time_limit_sec,practice_required,set_pages
+201,TAP_L1,tap,TAP,,1~9 빨리 누르기 1단계,tap_sequence,,1부터 9까지 순서대로 눌러요. 12초 안에 실수 없이!,per_set,12,3,1
+202,TAP_L2,tap,TAP,,1~9 빨리 누르기 2단계,tap_sequence,,1부터 9까지 순서대로 눌러요. 8초 안에 실수 없이!,per_set,8,3,2
+203,TAP_L3,tap,TAP,,1~9 빨리 누르기 3단계,tap_sequence,,1부터 9까지 순서대로 눌러요. 5초 안에 실수 없이!,per_set,5,3,3
