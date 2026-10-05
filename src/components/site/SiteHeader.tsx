@@ -13,12 +13,12 @@ export async function SiteHeader() {
           <img src="/site/logo-white.png" alt={BRAND} className="h-10 w-auto sm:h-12" />
         </Link>
 
-        <nav className="ml-auto hidden items-center gap-1 lg:flex" aria-label="주 메뉴">
+        <nav className="ml-auto hidden items-center gap-1 xl:flex" aria-label="주 메뉴">
           {MENU.map((m) => (
             <div key={m.href} className="group relative">
               <Link
                 href={m.href}
-                className={`block rounded-lg px-3 py-3 text-[15px] font-bold hover:bg-white/15 ${m.href === "/studyroom" ? "text-site-yellow" : ""}`}
+                className={`block whitespace-nowrap rounded-lg px-3 py-3 text-[15px] font-bold hover:bg-white/15 ${m.href === "/studyroom" ? "text-site-yellow" : ""}`}
               >
                 {m.label}
               </Link>
@@ -33,7 +33,7 @@ export async function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 text-sm lg:ml-2">
+        <div className="ml-auto flex items-center gap-1 text-sm xl:ml-2">
           {user ? (
             <>
               <Link href={homeFor(user.role)} className="whitespace-nowrap rounded-lg px-3 py-2 font-semibold hover:bg-white/15">
@@ -49,7 +49,7 @@ export async function SiteHeader() {
               <Link href="/signup/student" className="hidden whitespace-nowrap rounded-lg px-3 py-2 hover:bg-white/15 sm:block">회원가입</Link>
             </>
           )}
-          <details className="relative lg:hidden">
+          <details className="relative xl:hidden">
             <summary className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-lg text-2xl hover:bg-white/15" aria-label="메뉴">☰</summary>
             <nav className="absolute right-0 top-12 w-60 rounded-2xl bg-white p-2 text-gray-800 shadow-xl" aria-label="모바일 메뉴">
               {MENU.flatMap((m) => (m.children ? m.children : [m])).map((m) => (

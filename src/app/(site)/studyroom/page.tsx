@@ -10,7 +10,7 @@ import { Section, SubHero } from "@/components/site/SubHero";
 export const metadata: Metadata = { title: "학습자료실" };
 
 const STEPS = [
-  { n: 1, title: "진단 테스트", body: "쉬운 단계부터 풀어 보며 지금 내 단계를 찾아요." },
+  { n: 1, title: "진단 테스트", body: "쉬운 단계부터 풀어 보며 지금 내 단계를 찾아요.", href: "/s/assessment" },
   { n: 2, title: "그림 설명", body: "어려웠던 부분을 수직선·묶음·10칸 상자 그림으로 다시 봐요." },
   { n: 3, title: "연습 3번", body: "같은 세트를 세 번 연습하면 테스트가 열려요." },
   { n: 4, title: "테스트 통과", body: "다 맞히고 기준 시간 안에 풀면 다음 단계로!" },
@@ -96,13 +96,29 @@ export default async function StudyRoomPage() {
         <Section>
           <h2 className="text-center text-2xl font-black sm:text-3xl">이렇게 공부해요</h2>
           <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((s) => (
-              <li key={s.n} className="rounded-2xl bg-white p-5 shadow-sm">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-site-purple text-lg font-black text-white">{s.n}</span>
-                <h3 className="mt-3 text-lg font-black">{s.title}</h3>
-                <p className="mt-1 text-gray-600">{s.body}</p>
-              </li>
-            ))}
+            {STEPS.map((s) => {
+              const body = (
+                <>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-site-purple text-lg font-black text-white">{s.n}</span>
+                  <h3 className="mt-3 text-lg font-black">{s.title}</h3>
+                  <p className="mt-1 text-gray-600">{s.body}</p>
+                </>
+              );
+              // ① 진단 테스트 is a menu: it opens the 진단 평가 (one question per screen).
+              if ("href" in s && s.href) {
+                const href = !user ? "/login" : user.role === "student" ? s.href : homeFor(user.role);
+                return (
+                  <li key={s.n}>
+                    <Link href={href} data-testid="step-assessment"
+                      className="group block h-full rounded-2xl bg-white p-5 shadow-sm ring-2 ring-site-purple transition hover:-translate-y-1 hover:shadow-lg">
+                      {body}
+                      <span className="mt-3 inline-block font-bold text-site-purple group-hover:underline">시작하기 →</span>
+                    </Link>
+                  </li>
+                );
+              }
+              return <li key={s.n} className="rounded-2xl bg-white p-5 shadow-sm">{body}</li>;
+            })}
           </ol>
         </Section>
       </section>

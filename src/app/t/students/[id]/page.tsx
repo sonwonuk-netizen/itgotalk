@@ -81,6 +81,26 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
         </Card>
       </div>
 
+      <h2 className="mb-2 mt-6 text-lg font-bold">진단 평가</h2>
+      <Card>
+        {d.assessments.length === 0 ? <p className="text-sm text-gray-500">아직 진단 평가를 보지 않았어요.</p> : (
+          <ul className="divide-y text-sm">
+            {d.assessments.map((a) => (
+              <li key={a.id} className="flex flex-wrap items-center gap-3 py-2">
+                <span className="w-32 text-gray-500">{formatDateTime(a.started_at)}</span>
+                {a.finished_at ? (
+                  <>
+                    <b>자동 채점 {a.auto_correct} / {a.auto_total}</b>
+                    {a.manual_pending ? <Badge tone="amber">교사 확인 {a.manual_pending}</Badge> : null}
+                  </>
+                ) : <Badge>푸는 중</Badge>}
+                <Link href={`/t/students/${id}/assessment/${a.id}`} className="ml-auto font-semibold text-brand-600 hover:underline">답안 보기 →</Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
+
       <h2 className="mb-2 mt-6 text-lg font-bold">학부모 리포트</h2>
       <Card>
         <form action={createReportAction} className="mb-3">

@@ -135,3 +135,37 @@ test("1~9 빨리 누르기: start without diagnostic, tap 1→9, practice is cou
   await page.getByRole("link", { name: /학습 화면으로/ }).click();
   await expect(page.locator('[data-track="tap"]').getByTestId("practice-count")).toHaveText("1 / 3");
 });
+
+test("진단 테스트: 학습자료실 ① → one question per screen → resume → submit → result", async ({ page }) => {
+  await page.goto("/login");
+  await page.locator('input[name="loginId"]').fill("student1");
+  await page.locator('input[name="password"]').fill("1234");
+  await page.getByRole("button", { name: "로그인" }).click();
+  await expect(page).toHaveURL(/\/s\//);
+
+  await page.goto("/studyroom");
+  await expect(page.getByTestId("step-assessment")).toHaveAttribute("href", "/s/assessment");
+  await page.goto("/s/assessment");
+  await page.getByRole("button", { name: "진단 테스트 시작" }).click();
+  await expect(page).toHaveURL(/\/s\/assessment\/[0-9a-f-]+$/);
+
+  const q = page.getByTestId("assessment-question");
+  await expect(q).toContainText("15");
+  await expect(q.locator(".katex").first()).toBeVisible(); // equations rendered by KaTeX
+  await q.getByRole("textbox").fill("19");
+  await page.getByRole("button", { name: "다음 →" }).click();
+  await expect(page.getByRole("button", { name: /^2 \// })).toBeVisible();
+  await q.getByRole("textbox").fill("30"); // 22 + 7 → wrong on purpose
+  await page.getByRole("button", { name: "다음 →" }).click();
+  await expect(page.getByRole("button", { name: /^3 \// })).toBeVisible();
+
+  // Leave and come back: answers are kept and we resume at the first unanswered question.
+  await page.goto("/s/assessment");
+  await page.getByRole("button", { name: "이어서 풀기" }).click();
+  await expect(page.getByRole("button", { name: /^3 \// })).toBeVisible();
+
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "제출", exact: true }).click();
+  await expect(page).toHaveURL(/\/result$/);
+  await expect(page.getByTestId("assessment-score")).toHaveText(/^1 \/ \d+$/);
+});

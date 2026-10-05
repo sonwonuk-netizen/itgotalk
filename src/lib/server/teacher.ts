@@ -76,6 +76,10 @@ export async function loadStudentDetail(userId: string, studentId: string) {
       "select id, period_start::text, period_end::text, lines, share_token, expires_at, sent_at from reports where student_id = $1 order by created_at desc",
       [studentId],
     );
-    return { student, tracks, skills, progress, attempts, comments, reports };
+    const { rows: assessments } = await tx.query<{ id: string; started_at: Date; finished_at: Date | null; auto_correct: number | null; auto_total: number | null; manual_pending: number | null }>(
+      "select id, started_at, finished_at, auto_correct, auto_total, manual_pending from assessment_attempts where student_id = $1 order by started_at desc",
+      [studentId],
+    );
+    return { student, tracks, skills, progress, attempts, comments, reports, assessments };
   });
 }
