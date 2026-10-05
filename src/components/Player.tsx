@@ -167,7 +167,8 @@ export function Player({ setId, mode, initial, title, onDiagnosticFinished }: Pr
     );
   }
 
-  const item = play.items[index]!;
+  // TapBoard reports progress up to items.length after the last tap, so clamp to stay on a real item.
+  const item = play.items[Math.min(index, play.items.length - 1)]!;
   const parts = displayParts(item);
   const reveal = play.mode === "practice" && tries >= 2;
   const aiProgress = play.aiTargetMs ? Math.min(1, elapsed / play.aiTargetMs) : 0;
