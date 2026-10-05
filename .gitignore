@@ -9,3 +9,10 @@ next-env.d.ts
 
 # Source PDFs may contain student personal data — keep them out of the repo
 *.pdf
+
+# Cloudflare / OpenNext
+.open-next/
+.wrangler/
+.dev.vars*
+# Copied from content/assessment/figures by `pnpm cf:build` (Workers have no filesystem for the figure route)
+public/assessment-figures/

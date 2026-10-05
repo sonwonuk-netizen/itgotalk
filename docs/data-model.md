@@ -1,6 +1,6 @@
 # 데이터 모델
 
-스키마 원본: `db/schema.sql`. 시드: `content/*.csv`.
+스키마 원본: `migrations/0001_schema.sql` (SQLite / Cloudflare D1). 시드: `content/*.csv`.
 
 ## 관계 요약
 ```

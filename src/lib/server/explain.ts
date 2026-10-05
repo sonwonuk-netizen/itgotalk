@@ -96,7 +96,7 @@ async function build(tx: Tx, skillId: string, attempt: AttemptRow | null): Promi
   } else {
     const { rows: items } = await tx.query<ExampleProblem>(
       `select i.a, i.op, i.b, i.blank, i.answer from items i join item_sets s on s.id = i.set_id
-       where s.skill_id = $1 and ($2::text is null or s.id = $2) order by s.ord, i.ord limit 1`,
+       where s.skill_id = $1 and ($2 is null or s.id = $2) order by s.ord, i.ord limit 1`,
       [skillId, attempt?.set_id ?? null],
     );
     example = items[0] ?? null;

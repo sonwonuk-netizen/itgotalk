@@ -10,7 +10,7 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
   const { skills, items } = await asUser(user.id, async (tx) => ({
     skills: (await tx.query<{ id: string; ord: number; name: string; track: string; pattern: string; time_rule: string; time_limit_sec: string; practice_required: number; sets: number; items: number }>(
       `select k.id, k.ord, k.name, t.name as track, k.pattern, k.time_rule, k.time_limit_sec, k.practice_required,
-              count(distinct s.id)::int as sets, count(i.id)::int as items
+              count(distinct s.id) as sets, count(i.id) as items
        from skills k join tracks t on t.id = k.track_id
        left join item_sets s on s.skill_id = k.id left join items i on i.set_id = s.id
        group by k.id, t.name, t.ord order by t.ord, k.ord`,

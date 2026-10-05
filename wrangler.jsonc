@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "itgotalk",
+  "account_id": "49fad596ec5069d0e807706cb8eca5e6",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "itgotalk" }],
+  // App data. Schema: migrations/ (pnpm db:migrate:remote); content: pnpm db:seed:sql && pnpm db:seed:remote
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "itgotalk",
+      "database_id": "05bfcc1a-e05f-495a-82aa-c90cf1ba0118",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": { "enabled": true }
+  // Secrets (set with `wrangler secret put`): SESSION_SECRET, CRON_SECRET
+}

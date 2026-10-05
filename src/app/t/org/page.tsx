@@ -8,9 +8,10 @@ import { Badge, Card, formatDateTime } from "@/components/ui";
 export default async function OrgPage() {
   const user = await requireStaff({ orgAdmin: true });
   const { org, teachers } = await asUser(user.id, async (tx) => ({
-    org: (await tx.query<{ name: string; invite_code: string; kind: string }>("select name, invite_code, kind from organizations where id = public.admin_org()")).rows[0],
+    org: (await tx.query<{ name: string; invite_code: string; kind: string }>("select name, invite_code, kind from organizations where id = $1", [user.organizationId])).rows[0],
     teachers: (await tx.query<{ id: string; full_name: string | null; is_approved: boolean; created_at: Date }>(
-      "select id, full_name, is_approved, created_at from profiles where role = 'teacher' and organization_id = public.admin_org() order by is_approved, created_at desc",
+      "select id, full_name, is_approved, created_at from profiles where role = 'teacher' and organization_id = $1 order by is_approved, created_at desc",
+      [user.organizationId],
     )).rows,
   }));
   if (!org) return null;

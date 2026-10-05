@@ -5,47 +5,47 @@ import { revalidatePath } from "next/cache";
 import { loginIdToEmail } from "@/lib/auth/password";
 import { requireRole } from "@/lib/auth/session";
 import { validateExplanationsCsv, validateItemsCsv, validateSkillsCsv, type RowError } from "@/lib/content/validate";
-import { asService, asUser } from "@/lib/db/client";
+import { asService } from "@/lib/db/client";
 import { createUser, upsertExplanations, upsertItems, upsertSkills } from "@/lib/db/seed";
 import { generateReports } from "@/lib/server/reports";
 import { baseUrl } from "@/lib/server/url";
 
 const s = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 
-// ST-03 regions & schools — written under the admin's RLS scope.
+// ST-03 regions & schools. requireRole("admin") is the permission check for every write here.
 export async function addRegionAction(fd: FormData) {
-  const user = await requireRole("admin");
+  await requireRole("admin");
   const name = s(fd, "name");
   if (!name) return;
-  await asUser(user.id, (tx) => tx.query("insert into regions (name) values ($1) on conflict (name) do nothing", [name]));
+  await asService((tx) => tx.query("insert into regions (name) values ($1) on conflict (name) do nothing", [name]));
   revalidatePath("/admin/regions");
 }
 
 export async function addSchoolAction(fd: FormData) {
-  const user = await requireRole("admin");
+  await requireRole("admin");
   const name = s(fd, "name");
   const regionId = s(fd, "regionId");
   const level = s(fd, "level") || "elementary";
   if (!name || !regionId) return;
-  await asUser(user.id, (tx) =>
+  await asService((tx) =>
     tx.query("insert into schools (region_id, name, level) values ($1,$2,$3) on conflict (region_id, name) do nothing", [regionId, name, level]),
   );
   revalidatePath("/admin/regions");
 }
 
 export async function renameAction(fd: FormData) {
-  const user = await requireRole("admin");
+  await requireRole("admin");
   const table = s(fd, "table") === "schools" ? "schools" : "regions";
   const name = s(fd, "name");
   if (!name) return;
-  await asUser(user.id, (tx) => tx.query(`update ${table} set name = $2 where id = $1`, [s(fd, "id"), name]));
+  await asService((tx) => tx.query(`update ${table} set name = $2 where id = $1`, [s(fd, "id"), name]));
   revalidatePath("/admin/regions");
 }
 
 export async function toggleActiveAction(fd: FormData) {
-  const user = await requireRole("admin");
+  await requireRole("admin");
   const table = s(fd, "table") === "schools" ? "schools" : "regions";
-  await asUser(user.id, (tx) => tx.query(`update ${table} set is_active = not is_active where id = $1`, [s(fd, "id")]));
+  await asService((tx) => tx.query(`update ${table} set is_active = not is_active where id = $1`, [s(fd, "id")]));
   revalidatePath("/admin/regions");
 }
 
@@ -64,7 +64,7 @@ export async function createOrgAction(_: OrgFormState, fd: FormData): Promise<Or
   if (password.length < 8) return { error: "비밀번호는 8자 이상입니다." };
   const code = randomBytes(6).toString("hex").slice(0, 8).toUpperCase();
   return asService(async (tx) => {
-    if ((await tx.query("select 1 from auth.users where email = $1", [loginIdToEmail(loginId)])).rows.length) {
+    if ((await tx.query("select 1 from user_credentials where email = $1", [loginIdToEmail(loginId)])).rows.length) {
       return { error: "이미 쓰고 있는 아이디입니다." };
     }
     const org = (await tx.query<{ id: string }>("insert into organizations (name, kind, invite_code) values ($1,$2,$3) returning id", [name, kind, code])).rows[0]!;
@@ -119,7 +119,7 @@ export async function generateAllReportsAction() {
 }
 
 export async function markInquiryHandledAction(fd: FormData) {
-  const user = await requireRole("admin");
-  await asUser(user.id, (tx) => tx.query("update inquiries set handled_at = now() where id = $1 and handled_at is null", [s(fd, "id")]));
+  await requireRole("admin");
+  await asService((tx) => tx.query("update inquiries set handled_at = $2 where id = $1 and handled_at is null", [s(fd, "id"), new Date()]));
   revalidatePath("/admin/inquiries");
 }

@@ -6,7 +6,7 @@ import { loadProgress, loadSkills, loadTracks } from "./content";
 /** Every query here runs under the teacher's RLS scope: other organizations' rows never come back. */
 
 export async function unreadAlertCount(userId: string): Promise<number> {
-  return asUser(userId, async (tx) => (await tx.query<{ n: number }>("select count(*)::int as n from teacher_alerts where read_at is null")).rows[0]!.n);
+  return asUser(userId, async (tx) => (await tx.query<{ n: number }>("select count(*) as n from teacher_alerts where read_at is null")).rows[0]!.n);
 }
 
 export async function listStudents(userId: string) {
@@ -17,20 +17,19 @@ export async function listStudents(userId: string) {
       consecutive_fail: number | null; open_alerts: number;
     }>(
       `select p.id, p.display_initial, p.grade, sc.name as school,
-              cur.current_skills, cur.consecutive_fail,
+              -- one current skill per track
+              (select group_concat(c.label, ', ') from (
+                 select k.name || ' · 세트 ' || s.ord as label
+                 from skill_progress sp join skills k on k.id = sp.skill_id
+                 left join item_sets s on s.id = sp.current_set_id
+                 where sp.student_id = p.id and sp.status = 'in_progress' order by k.ord) c) as current_skills,
+              (select max(sp.consecutive_fail) from skill_progress sp
+                 where sp.student_id = p.id and sp.status = 'in_progress') as consecutive_fail,
               la.created_at as last_at, la.mode as last_mode, la.elapsed_ms as last_elapsed, la.passed as last_passed,
-              (select count(*)::int from teacher_alerts t where t.student_id = p.id and t.read_at is null) as open_alerts
+              (select count(*) from teacher_alerts t where t.student_id = p.id and t.read_at is null) as open_alerts
        from profiles p
        left join schools sc on sc.id = p.school_id
-       left join lateral (
-         -- one current skill per track
-         select string_agg(k.name || ' · 세트 ' || s.ord, ', ' order by k.ord) as current_skills,
-                max(sp.consecutive_fail) as consecutive_fail
-         from skill_progress sp join skills k on k.id = sp.skill_id
-         left join item_sets s on s.id = sp.current_set_id
-         where sp.student_id = p.id and sp.status = 'in_progress'
-       ) cur on true
-       left join lateral (select created_at, mode, elapsed_ms, passed from attempts a where a.student_id = p.id order by created_at desc limit 1) la on true
+       left join attempts la on la.id = (select a.id from attempts a where a.student_id = p.id order by a.created_at desc limit 1)
        where p.role = 'student'
        order by p.display_initial`,
     );
@@ -73,7 +72,7 @@ export async function loadStudentDetail(userId: string, studentId: string) {
       [studentId],
     );
     const { rows: reports } = await tx.query<{ id: string; period_start: string; period_end: string; lines: string[]; share_token: string; expires_at: Date; sent_at: Date | null }>(
-      "select id, period_start::text, period_end::text, lines, share_token, expires_at, sent_at from reports where student_id = $1 order by created_at desc",
+      "select id, period_start, period_end, lines, share_token, expires_at, sent_at from reports where student_id = $1 order by created_at desc",
       [studentId],
     );
     const { rows: assessments } = await tx.query<{ id: string; started_at: Date; finished_at: Date | null; auto_correct: number | null; auto_total: number | null; manual_pending: number | null }>(

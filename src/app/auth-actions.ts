@@ -20,7 +20,7 @@ export async function loginAction(_: FormState, fd: FormData): Promise<FormState
   const password = String(fd.get("password") ?? "");
   const user = await asService(async (tx) => {
     const { rows } = await tx.query<{ id: string; encrypted_password: string; role: Role }>(
-      "select u.id, u.encrypted_password, p.role from auth.users u join profiles p on p.id = u.id where u.email = $1",
+      "select u.id, u.encrypted_password, p.role from user_credentials u join profiles p on p.id = u.id where u.email = $1",
       [loginIdToEmail(loginId)],
     );
     return rows[0];
@@ -38,7 +38,7 @@ export async function logoutAction() {
 }
 
 async function loginIdTaken(loginId: string): Promise<boolean> {
-  return asService(async (tx) => (await tx.query("select 1 from auth.users where email = $1", [loginIdToEmail(loginId)])).rows.length > 0);
+  return asService(async (tx) => (await tx.query("select 1 from user_credentials where email = $1", [loginIdToEmail(loginId)])).rows.length > 0);
 }
 
 /** ST-01: region → school → grade → invite code → guardian phone + consent. */
@@ -66,13 +66,13 @@ export async function signupStudentAction(_: FormState, fd: FormData): Promise<F
     if (school.rows.length === 0) return { error: "선택한 학교를 찾을 수 없어요." };
     const org = await tx.query<{ id: string }>("select id from organizations where invite_code = $1", [inviteCode]);
     if (org.rows.length === 0) return { error: "초대 코드가 맞지 않아요. 선생님께 다시 확인해 주세요." };
-    if ((await tx.query("select 1 from auth.users where email = $1", [loginIdToEmail(loginId)])).rows.length) {
+    if ((await tx.query("select 1 from user_credentials where email = $1", [loginIdToEmail(loginId)])).rows.length) {
       return { error: "이미 쓰고 있는 아이디예요." };
     }
     const id = await createUser(tx, {
       loginId, password, role: "student", initial, grade, schoolId, organizationId: org.rows[0]!.id, approved: true,
     });
-    await tx.query("insert into guardians (student_id, phone, consent_at) values ($1, $2, now())", [id, phone.replaceAll("-", "")]);
+    await tx.query("insert into guardians (student_id, phone, consent_at) values ($1, $2, $3)", [id, phone.replaceAll("-", ""), new Date()]);
     return { id };
   });
   if ("error" in result) return result;

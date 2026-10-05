@@ -10,7 +10,7 @@
 |---|---|---|
 | `docs/PRD.md` | MVP 범위, 사용자 스토리, 수용 기준 | 기능 작업 시작 전 항상 |
 | `docs/learning-engine.md` | 진도·통과 판정 규칙, 의사코드, 테스트 케이스 | 학습 로직 수정 시 |
-| `docs/data-model.md` | 엔티티 설명 (`db/schema.sql`과 짝) | DB/API 작업 시 |
+| `docs/data-model.md` | 엔티티 설명 (`migrations/0001_schema.sql`과 짝) | DB/API 작업 시 |
 | `docs/screens.md` | 화면 목록, 라우트, 화면별 요소 | UI 작업 시 |
 | `docs/build-prompts.md` | 단계별 개발 지시 프롬프트 (사람용) | — |
 | `content/skills.csv` | 스킬(단계) 정의 | 시드 데이터 |
@@ -20,7 +20,8 @@
 ## 기술 스택 (기본값 — 바꾸려면 먼저 사람에게 확인)
 - Next.js (App Router) + TypeScript (strict)
 - Tailwind CSS, 태블릿 가로 화면 우선 반응형, PWA
-- Supabase (Postgres + Auth + Row Level Security)
+- Cloudflare Workers (OpenNext) + D1 (SQLite). 로컬 개발·테스트는 node:sqlite로 같은 SQL을 씀
+- 행 단위 접근 규칙은 `src/lib/db/scope.ts`가 강제 (D1에는 RLS가 없음)
 - 테스트: Vitest (학습 엔진은 100% 단위 테스트), Playwright (핵심 흐름 E2E)
 - 패키지 매니저: pnpm
 
@@ -38,7 +39,7 @@ pnpm db:seed      # content/*.csv → DB
 2. **통과 조건 = 전 문항 정답 AND 소요 시간 ≤ 스킬의 time_limit_sec.** 기준값은 `skills` 테이블에서 읽고 코드에 하드코딩하지 않는다.
 3. **연습 3회를 마쳐야 테스트가 열린다.** 테스트 문항은 같은 스킬 범위에서 랜덤 재배열한다.
 4. **모든 시도(Attempt)는 저장한다.** 실패도 기록이며, 리포트와 진도는 Attempt에서 계산한다(파생 데이터를 직접 수정하지 않는다).
-5. **회원 대부분이 만 14세 미만이다.** 학생 화면에는 실명 대신 이니셜만 표시하고, 교사는 자기 기관 학생 정보만 조회한다(RLS로 강제).
+5. **회원 대부분이 만 14세 미만이다.** 학생 화면에는 실명 대신 이니셜만 표시하고, 교사는 자기 기관 학생 정보만 조회한다(`asUser()` + `src/lib/db/scope.ts`로 강제, `tests/unit/rls.test.ts`로 검증).
 6. 학습 엔진(`src/lib/engine/`)은 React·DB에 의존하지 않는 순수 함수로 작성한다.
 
 ## 코딩 규칙

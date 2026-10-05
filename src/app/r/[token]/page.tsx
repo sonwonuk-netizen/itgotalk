@@ -1,22 +1,11 @@
-import { asAnon } from "@/lib/db/client";
+import { loadReportByToken } from "@/lib/server/reports";
 
 export const dynamic = "force-dynamic";
 
-/** Parent report: no login, token link, expires after 30 days (ST-30). Reads only via security-definer functions. */
+/** Parent report: no login, token link, expires after 30 days (ST-30). Reads only through loadReportByToken. */
 export default async function ParentReportPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const data = await asAnon(async (tx) => {
-    const r = (await tx.query<{ student_initial: string; organization_name: string | null; period_start: string; period_end: string; lines: string[]; expires_at: Date }>(
-      "select student_initial, organization_name, period_start::text, period_end::text, lines, expires_at from get_report_by_token($1)",
-      [token],
-    )).rows[0];
-    if (!r) return null;
-    const comments = (await tx.query<{ body: string; author_name: string | null; created_at: Date }>(
-      "select body, author_name, created_at from get_report_comments_by_token($1)",
-      [token],
-    )).rows;
-    return { r, comments };
-  });
+  const data = await loadReportByToken(token);
 
   if (!data) {
     return (

@@ -51,10 +51,11 @@ export interface StudentRef {
 
 async function diagnosticResults(tx: Tx, studentId: string, trackId: string): Promise<DiagnosticResults> {
   const { rows } = await tx.query<{ skill_id: string; passed: boolean }>(
-    `select distinct on (s.skill_id) s.skill_id, a.passed
-     from attempts a join item_sets s on s.id = a.set_id join skills k on k.id = s.skill_id
-     where a.student_id = $1 and a.mode = 'diagnostic' and k.track_id = $2
-     order by s.skill_id, a.created_at desc`,
+    `select skill_id, passed from (
+       select s.skill_id, a.passed, row_number() over (partition by s.skill_id order by a.created_at desc) as rn
+       from attempts a join item_sets s on s.id = a.set_id join skills k on k.id = s.skill_id
+       where a.student_id = $1 and a.mode = 'diagnostic' and k.track_id = $2
+     ) where rn = 1`,
     [studentId, trackId],
   );
   return Object.fromEntries(rows.map((r) => [r.skill_id, r.passed]));
@@ -171,13 +172,16 @@ export interface FinishResult {
 
 /**
  * Grades on the server, verifies time against the server clock, stores the Attempt
- * (pass or fail) and applies the engine's progress effects — all in one transaction.
+ * (pass or fail) and applies the engine's progress effects.
+ *
+ * D1 has no transactions: a conditional update claims the session first, so a double submit
+ * (two tabs, a retried request) records at most one Attempt.
  */
 export async function finishPlay(student: StudentRef, input: FinishInput): Promise<FinishResult> {
   return asService(async (tx) => {
     const finishedAt = new Date();
     const { rows: sess } = await tx.query<{ set_id: string; mode: AttemptMode; item_order: string[]; started_at: Date; finished_at: Date | null }>(
-      "select set_id, mode, item_order, started_at, finished_at from play_sessions where id = $1 and student_id = $2 for update",
+      "select set_id, mode, item_order, started_at, finished_at from play_sessions where id = $1 and student_id = $2",
       [input.sessionId, student.id],
     );
     const session = sess[0];
@@ -214,6 +218,12 @@ export async function finishPlay(student: StudentRef, input: FinishInput): Promi
     const judged = session.mode === "test" || session.mode === "diagnostic";
     const passed = judged ? isPass({ itemCount: order.length, correctCount: correct, elapsedMs }, skill) : null;
 
+    const claimed = await tx.query(
+      "update play_sessions set finished_at = $2 where id = $1 and finished_at is null returning id",
+      [input.sessionId, finishedAt],
+    );
+    if (claimed.rows.length === 0) throw new PlayError("이미 제출한 풀이예요.");
+
     const { rows: att } = await tx.query<{ id: string }>(
       `insert into attempts (student_id, set_id, mode, item_count, correct_count, client_elapsed_ms,
          server_started_at, server_finished_at, elapsed_ms, passed, wrong_items)
@@ -222,7 +232,7 @@ export async function finishPlay(student: StudentRef, input: FinishInput): Promi
         session.started_at, finishedAt, elapsedMs, passed, JSON.stringify(wrong)],
     );
     const attemptId = att[0]!.id;
-    await tx.query("update play_sessions set finished_at = $2, attempt_id = $3 where id = $1", [input.sessionId, finishedAt, attemptId]);
+    await tx.query("update play_sessions set attempt_id = $2 where id = $1", [input.sessionId, attemptId]);
 
     if (session.mode === "diagnostic") {
       const d = await nextDiagnosticSet(tx, student.id, trackId, skills);
@@ -232,8 +242,8 @@ export async function finishPlay(student: StudentRef, input: FinishInput): Promi
 
     if (session.mode === "practice") {
       await tx.query(
-        "update review_assignments set completed_at = now() where student_id = $1 and set_id = $2 and completed_at is null",
-        [student.id, session.set_id],
+        "update review_assignments set completed_at = $3 where student_id = $1 and set_id = $2 and completed_at is null",
+        [student.id, session.set_id, finishedAt],
       );
     }
 
@@ -275,7 +285,7 @@ async function persistEffect(tx: Tx, studentId: string, e: Effect) {
     case "open_set":
       return; // already reflected in current_set_id
     case "skill_passed":
-      await tx.query("update skill_progress set passed_at = now() where student_id = $1 and skill_id = $2", [studentId, e.skillId]);
+      await tx.query("update skill_progress set passed_at = $3 where student_id = $1 and skill_id = $2", [studentId, e.skillId, new Date()]);
       return;
     case "start_skill":
       await tx.query(
@@ -320,8 +330,8 @@ async function insertProgress(tx: Tx, studentId: string, skills: SkillInfo[], pl
   for (const r of initialProgress(skills, placement)) {
     await tx.query(
       `insert into skill_progress (student_id, skill_id, status, current_set_id, passed_at)
-       values ($1,$2,$3,$4, case when $3 = 'passed' then now() end) on conflict do nothing`,
-      [studentId, r.skillId, r.status, r.currentSetId],
+       values ($1,$2,$3,$4, case when $3 = 'passed' then $5 end) on conflict do nothing`,
+      [studentId, r.skillId, r.status, r.currentSetId, new Date()],
     );
   }
 }

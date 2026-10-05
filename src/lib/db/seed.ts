@@ -12,7 +12,7 @@ import {
   type SkillRow,
   type TrackRow,
 } from "../content/validate";
-import type { Tx } from "./open";
+import type { Tx } from "./types";
 
 export class ContentError extends Error {
   constructor(
@@ -25,7 +25,7 @@ export class ContentError extends Error {
 
 export async function upsertSkills(tx: Tx, skills: SkillRow[]): Promise<void> {
   // Park existing ords out of the way so reordering does not trip the unique constraint.
-  await tx.query("update skills set ord = -ord - 100000 where id = any($1::text[])", [skills.map((s) => s.id)]);
+  await tx.query("update skills set ord = -ord - 100000 where id in (select value from json_each($1))", [skills.map((s) => s.id)]);
   for (const s of skills) {
     await tx.query(
       `insert into skills (id, ord, book, week, name, pattern, operand, hint, time_rule, time_limit_sec, practice_required, track_id)
@@ -64,12 +64,12 @@ export async function upsertItems(tx: Tx, items: ItemRow[]): Promise<{ sets: num
         [setId, it.ord, it.a, it.op, it.b, it.blank, it.answer],
       );
     }
-    await tx.query("delete from items where set_id = $1 and not (ord = any($2::int[]))", [setId, s.rows.map((r) => r.ord)]);
+    await tx.query("delete from items where set_id = $1 and ord not in (select value from json_each($2))", [setId, s.rows.map((r) => r.ord)]);
   }
   // Order sets inside each skill by page.
   await tx.query(`
-    update item_sets s set ord = r.rn
-    from (select id, row_number() over (partition by skill_id order by page) as rn from item_sets) r
+    update item_sets as s set ord = r.rn
+    from (select id, row_number() over (partition by skill_id order by page) as rn from item_sets) as r
     where r.id = s.id`);
   return { sets: sets.size, items: items.length };
 }
@@ -117,7 +117,7 @@ export function loadContentFiles(): { tracks: TrackRow[]; skills: SkillRow[]; it
 }
 
 export async function upsertTracks(tx: Tx, tracks: TrackRow[]): Promise<void> {
-  await tx.query("update tracks set ord = -ord - 100000 where id = any($1::text[])", [tracks.map((t) => t.id)]);
+  await tx.query("update tracks set ord = -ord - 100000 where id in (select value from json_each($1))", [tracks.map((t) => t.id)]);
   for (const t of tracks) {
     await tx.query(
       `insert into tracks (id, ord, name, description, icon, has_diagnostic) values ($1,$2,$3,$4,$5,$6)
@@ -170,7 +170,7 @@ export async function createUser(
   },
 ): Promise<string> {
   const { rows } = await tx.query<{ id: string }>(
-    "insert into auth.users (email, encrypted_password) values ($1, $2) returning id",
+    "insert into user_credentials (email, encrypted_password) values ($1, $2) returning id",
     [loginIdToEmail(u.loginId), await hashPassword(u.password)],
   );
   const id = rows[0]!.id;
@@ -211,7 +211,7 @@ export async function seedDemoData(tx: Tx): Promise<void> {
   const s1 = await createUser(tx, { ...studentBase, loginId: "student1", initial: "ㄱㅁ", grade: 1 });
   const s2 = await createUser(tx, { ...studentBase, loginId: "student2", initial: "ㅂㅈ", grade: 2 });
   for (const sid of [s1, s2]) {
-    await tx.query("insert into guardians (student_id, phone, consent_at) values ($1, '010-0000-0000', now())", [sid]);
+    await tx.query("insert into guardians (student_id, phone, consent_at) values ($1, '010-0000-0000', $2)", [sid, new Date()]);
   }
   await seedDemoHistory(tx, s2);
 }
@@ -219,7 +219,7 @@ export async function seedDemoData(tx: Tx): Promise<void> {
 /** Gives student2 two weeks of believable attempts so teacher and report screens have data. */
 async function seedDemoHistory(tx: Tx, studentId: string): Promise<void> {
   const { rows: sets } = await tx.query<{ id: string; skill_id: string; n: number }>(
-    `select s.id, s.skill_id, count(i.id)::int as n from item_sets s join items i on i.set_id = s.id
+    `select s.id, s.skill_id, count(i.id) as n from item_sets s join items i on i.set_id = s.id
      join skills k on k.id = s.skill_id group by s.id, s.skill_id, k.ord, s.ord order by k.ord, s.ord`,
   );
   const { rows: skills } = await tx.query<{ id: string }>("select id from skills where track_id = 'add' order by ord");
@@ -253,7 +253,7 @@ async function seedDemoHistory(tx: Tx, studentId: string): Promise<void> {
        case when k.ord = 3 then $2 end,
        case when k.ord = 3 then 1 else 0 end, 0,
        case when k.ord <= 2 then 10600 end,
-       case when k.ord <= 2 then now() - interval '5 days' end
+       case when k.ord <= 2 then strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-5 days') end
      from skills k where k.track_id = 'add'`,
     [studentId, current.id],
   );

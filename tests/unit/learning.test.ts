@@ -182,7 +182,7 @@ describe("explanation after the diagnostic depends on the weakness", () => {
   it("every skill has both an accuracy and a speed explanation", async () => {
     const db = await getDb();
     const { rows } = await db.query<{ n: number }>(
-      `select count(*)::int as n from skills k cross join (values ('accuracy'), ('speed')) w(weakness)
+      `select count(*) as n from skills k cross join (select 'accuracy' as weakness union all select 'speed') w
        where not exists (select 1 from skill_explanations e where e.skill_id = k.id and e.weakness = w.weakness)`,
     );
     expect(rows[0]!.n).toBe(0);

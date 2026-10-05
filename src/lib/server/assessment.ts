@@ -146,7 +146,7 @@ export async function loadAttemptForPlay(studentId: string, attemptId: string) {
 
 async function ownOpenAttempt(tx: Tx, studentId: string, attemptId: string) {
   const { rows } = await tx.query<{ assessment_id: string; finished_at: Date | null }>(
-    "select assessment_id, finished_at from assessment_attempts where id = $1 and student_id = $2 for update",
+    "select assessment_id, finished_at from assessment_attempts where id = $1 and student_id = $2",
     [attemptId, studentId],
   );
   const a = rows[0];
@@ -169,8 +169,8 @@ export async function saveAnswers(studentId: string, attemptId: string, itemId: 
       await tx.query(
         `insert into assessment_responses (attempt_id, item_id, blank_id, given, seconds) values ($1,$2,$3,$4,$5)
          on conflict (attempt_id, item_id, blank_id) do update
-           set given = excluded.given, seconds = assessment_responses.seconds + $5, updated_at = now()`,
-        [attemptId, itemId, b.id, value.slice(0, 500), delta],
+           set given = excluded.given, seconds = assessment_responses.seconds + $5, updated_at = $6`,
+        [attemptId, itemId, b.id, value.slice(0, 500), delta, new Date()],
       );
     }
   });
@@ -191,23 +191,25 @@ export async function submitAssessment(studentId: string, attemptId: string) {
       [attemptId],
     );
     const given = new Map(saved.map((r) => [`${r.item_id}#${r.blank_id}`, r.given]));
-    const results: (boolean | null)[] = [];
-    for (const it of items) {
-      for (const b of it.blanks) {
+    const graded = items.flatMap((it) =>
+      it.blanks.map((b) => {
         const g = given.get(`${it.id}#${b.id}`) ?? null;
-        const correct = gradeBlank(b, g, it.grading);
-        results.push(correct);
-        await tx.query(
-          `insert into assessment_responses (attempt_id, item_id, blank_id, given, correct) values ($1,$2,$3,$4,$5)
-           on conflict (attempt_id, item_id, blank_id) do update set correct = excluded.correct`,
-          [attemptId, it.id, b.id, g, correct],
-        );
-      }
-    }
+        return { item: it.id, blank: b.id, given: g, correct: gradeBlank(b, g, it.grading) };
+      }),
+    );
+    const results = graded.map((r) => r.correct);
+    // One statement for every blank: each D1 query is a network round trip from the Worker.
+    await tx.query(
+      `insert into assessment_responses (attempt_id, item_id, blank_id, given, correct)
+       select $1, json_extract(value, '$.item'), json_extract(value, '$.blank'), json_extract(value, '$.given'), json_extract(value, '$.correct')
+       from json_each($2) where true
+       on conflict (attempt_id, item_id, blank_id) do update set correct = excluded.correct`,
+      [attemptId, graded],
+    );
     const s = summarize(results);
     await tx.query(
-      "update assessment_attempts set finished_at = now(), auto_correct = $2, auto_total = $3, manual_pending = $4 where id = $1",
-      [attemptId, s.autoCorrect, s.autoTotal, s.manualPending],
+      "update assessment_attempts set finished_at = $5, auto_correct = $2, auto_total = $3, manual_pending = $4 where id = $1 and finished_at is null",
+      [attemptId, s.autoCorrect, s.autoTotal, s.manualPending, new Date()],
     );
     return s;
   });

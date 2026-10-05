@@ -13,25 +13,32 @@ pnpm dev            # http://localhost:3000  (첫 실행 시 DB 생성 + content
 | `director` | `teach1234` | 원장 (교사 승인, 초대코드) |
 | `admin` | `admin1234` | 본사 관리자 |
 
-학생 가입 초대 코드: `ITGO2026` (다른 기관 RLS 확인용: `SUNNY001`)
+학생 가입 초대 코드: `ITGO2026` (다른 기관 접근 규칙 확인용: `SUNNY001`)
 
 ```bash
-pnpm test           # 엔진 T1~T12 + 콘텐츠 검증 + RLS + 서버 훈련 루프 (60개)
+pnpm test           # 엔진 T1~T12 + 콘텐츠 검증 + 접근 규칙(rls.test) + 서버 훈련 루프
 pnpm test:e2e       # 가입 → 진단 → 연습 3회 → 테스트 통과 → 다음 세트 열림
 pnpm lint && pnpm typecheck
 pnpm db:seed        # CSV를 검증해 로컬 DB에 반영 (--reset: 초기화). dev 서버를 끈 상태에서 실행
-pnpm db:seed:sql    # supabase/seed.sql 생성 (Supabase용)
 ```
 
-## 데이터베이스: 로컬 PGlite → Supabase
-Docker/Supabase 없이 바로 돌도록 로컬에서는 **PGlite(WASM으로 돌아가는 실제 Postgres)** 를 씁니다.
-스키마·RLS는 Supabase와 같은 SQL입니다.
-- `supabase/migrations/*` — 스키마(`db/schema.sql` 그대로) + 보조 테이블 + RLS 정책
-- `db/local/00_supabase_stub.sql` — 로컬 전용: Supabase가 기본 제공하는 `auth.users`, `auth.uid()`, `anon/authenticated` 역할 흉내
-- 사용자 대신 읽는 쿼리는 모두 `asUser()`로 `authenticated` 역할 + JWT sub를 설정한 채 실행 → **RLS가 실제 경계**
-- 엔진 결과 쓰기(시도 저장·진도 갱신)는 서버에서 검증 후 `asService()`로 실행
+## 데이터베이스: 로컬 SQLite → Cloudflare D1
+D1은 SQLite이므로, 로컬에서도 Node 내장 `node:sqlite`(`.data/itgotalk.sqlite`)로 같은 SQL을 씁니다.
+- `migrations/*.sql` — 스키마. 로컬은 `src/lib/db/migrate.ts`가, D1은 `wrangler d1 migrations apply`가 적용
+- 날짜는 ISO 문자열, 불리언은 0/1, JSON은 문자열로 저장 → `src/lib/db/sqlite.ts`가 컬럼 이름 규칙으로 변환 (`*_at` → Date 등)
+- **접근 규칙**: D1에는 RLS가 없어서, 사용자 대신 읽는 쿼리는 모두 `asUser()`/`asAnon()`을 거치고
+  `src/lib/db/scope.ts`가 쿼리 속 테이블마다 "볼 수 있는 행만 남긴 CTE"를 씌웁니다. 이 경로는 읽기 전용입니다.
+- 쓰기는 서버에서 권한을 확인한 뒤 `asService()`로 실행 (D1은 트랜잭션이 없으므로 문장 하나하나가 안전하게 작성)
 
-Supabase로 옮길 때: 마이그레이션을 `supabase db push`, 로그인을 Supabase Auth로 교체(`src/lib/auth/`), `src/lib/db/client.ts`의 연결을 Postgres 연결로 교체.
+## Cloudflare 배포 (Workers + D1)
+```bash
+pnpm db:migrate:remote                 # migrations/ → D1
+pnpm db:seed:sql [--admin <아이디>]    # .data/d1-seed.sql 생성 (콘텐츠 + 선택: 본사 관리자 계정, 비밀번호는 한 번만 출력)
+pnpm db:seed:remote                    # 위 파일을 D1에 실행
+pnpm cf:deploy                         # OpenNext 빌드 → Workers 배포
+pnpm cf:preview                        # 배포 전 로컬 workerd + 로컬 D1로 확인 (먼저 --local로 migrations/seed 적용)
+```
+비밀값: `wrangler secret put SESSION_SECRET`, `wrangler secret put CRON_SECRET`. 운영 DB에는 데모 계정을 만들지 않습니다.
 
 ## 코드 지도
 ```
@@ -60,7 +67,7 @@ docs/learning-engine.md          진도·통과 판정 규칙, 의사코드, 테
 docs/data-model.md               엔티티 관계, CSV 매핑, 문항 표시 규칙
 docs/screens.md                  화면·라우트 명세, 문항 화면 레이아웃
 docs/build-prompts.md            단계별 개발 프롬프트 (0~10단계)
-db/schema.sql                    PostgreSQL(Supabase) 스키마
+migrations/0001_schema.sql       SQLite(Cloudflare D1) 스키마
 content/skills.csv               스킬 15개 (+1~+5 도입·직관·교환법칙, 10의 보수)
 content/items_addition_sum10.csv 덧셈 합 10 이하 문항 174개 (p1~p29)
 content/curriculum.csv           교재 SA~SH 주차별 커리큘럼 (1~68주 + 번호 없는 6개)

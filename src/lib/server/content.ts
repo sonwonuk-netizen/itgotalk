@@ -46,10 +46,10 @@ export async function loadSkills(tx: Tx, trackId?: string): Promise<SkillInfo[]>
     time_limit_sec: string | number; practice_required: number; set_ids: string[] | null;
   }>(
     `select k.id, k.ord, k.name, k.hint, k.time_rule, k.time_limit_sec, k.practice_required, k.track_id, k.pattern,
-            array_remove(array_agg(s.id order by s.ord), null) as set_ids
-     from skills k left join item_sets s on s.skill_id = k.id
-     where ($1::text is null or k.track_id = $1)
-     group by k.id order by k.ord`,
+            (select json_group_array(s.id) from (select id from item_sets where skill_id = k.id order by ord) s) as set_ids
+     from skills k
+     where ($1 is null or k.track_id = $1)
+     order by k.ord`,
     [trackId ?? null],
   );
   return rows.map((r) => ({

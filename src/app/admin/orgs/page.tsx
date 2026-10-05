@@ -9,8 +9,8 @@ export default async function OrgsPage() {
   const orgs = await asUser(user.id, async (tx) =>
     (await tx.query<{ id: string; name: string; kind: string; invite_code: string; created_at: Date; students: number; teachers: number }>(
       `select o.id, o.name, o.kind, o.invite_code, o.created_at,
-              count(p.id) filter (where p.role = 'student')::int as students,
-              count(p.id) filter (where p.role in ('teacher','org_admin'))::int as teachers
+              count(p.id) filter (where p.role = 'student') as students,
+              count(p.id) filter (where p.role in ('teacher','org_admin')) as teachers
        from organizations o left join profiles p on p.organization_id = o.id
        group by o.id order by o.created_at`,
     )).rows,
