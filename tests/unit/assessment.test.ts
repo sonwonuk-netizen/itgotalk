@@ -38,6 +38,12 @@ describe("진단 평가 flow", () => {
     expect(JSON.stringify(play.questions)).not.toContain('"answer"');
     // the comparison heading becomes context of the items below it, not a question of its own
     expect(play.questions.some((q) => q.contextHtml?.includes("비교"))).toBe(true);
+    // 연산 테스트 덧셈: one box per digit of the answer (count only — the answer itself is not sent)
+    const blankOf = (sec: number, label: string, part = 1) =>
+      play.questions.filter((q) => q.sectionNo === sec && q.label === label)[part - 1]!.stem.find((g) => g.t === "blank")!;
+    expect(blankOf(1, "①")).toMatchObject({ kind: "int", digits: 2 }); // 15 + 4 = 19
+    expect(blankOf(2, "⑨")).toMatchObject({ digits: 3 }); // 78 + 24 = 102
+    expect(blankOf(1, "①", 2)).not.toHaveProperty("digits"); // 4 + ( ) = 11 → single input
     // starting again resumes the same open attempt
     expect(await startAssessment(ids.s!)).toBe(id);
   });

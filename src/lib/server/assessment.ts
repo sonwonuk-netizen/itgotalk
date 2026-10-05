@@ -14,7 +14,8 @@ export interface Question {
   partTitleHtml: string;
   /** Instruction shared by several items (e.g. "다음 두 수의 크기를 비교하세요"). */
   contextHtml: string | null;
-  stem: ({ t: "html"; html: string } | { t: "br" } | { t: "blank"; id: string; kind: BlankKind })[];
+  /** digits: number of one-digit boxes for this blank (연산 테스트 덧셈), otherwise a single input. */
+  stem: ({ t: "html"; html: string } | { t: "br" } | { t: "blank"; id: string; kind: BlankKind; digits?: number })[];
   choices: { value: string; html: string }[] | null;
   figure: string | null;
 }
@@ -34,7 +35,7 @@ function splitLines(rich: string): Question["stem"] {
 interface ItemRow {
   id: string; label: string; type: string; grading: "auto" | "manual" | "mixed";
   stem: ({ t: "rich"; v: string } | { t: "blank"; id: string })[];
-  blanks: { id: string; kind: BlankKind }[];
+  blanks: { id: string; kind: BlankKind; digits?: number }[];
   choices: string[] | null; figure: string | null;
   part_title: string; section_no: number; section_title: string;
 }
@@ -68,6 +69,7 @@ async function loadQuestions(tx: Tx, assessmentId: string): Promise<Question[]> 
     }
     if (context && context.part !== r.part_title + r.section_no) context = null;
     const kinds = new Map(r.blanks.map((b) => [b.id, b.kind]));
+    const digits = new Map(r.blanks.map((b) => [b.id, b.digits]));
     out.push({
       id: r.id,
       no: out.length + 1,
@@ -77,7 +79,7 @@ async function loadQuestions(tx: Tx, assessmentId: string): Promise<Question[]> 
       sectionTitle: r.section_title,
       partTitleHtml: richToHtml(r.part_title),
       contextHtml: context?.html ?? null,
-      stem: r.stem.flatMap((g) => (g.t === "rich" ? splitLines(g.v) : [{ t: "blank" as const, id: g.id, kind: kinds.get(g.id) ?? "text" }])),
+      stem: r.stem.flatMap((g) => (g.t === "rich" ? splitLines(g.v) : [{ t: "blank" as const, id: g.id, kind: kinds.get(g.id) ?? "text", ...(digits.get(g.id) ? { digits: digits.get(g.id) } : {}) }])),
       choices: r.choices ? r.choices.map((c) => ({ value: c, html: choiceToHtml(c) })) : null,
       figure: r.figure ? `/assessment-figures/${r.figure.replace(/^figures\//, "")}` : null,
     });

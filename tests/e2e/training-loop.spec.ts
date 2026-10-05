@@ -152,10 +152,15 @@ test("진단 테스트: 학습자료실 ① → one question per screen → resu
   const q = page.getByTestId("assessment-question");
   await expect(q).toContainText("15");
   await expect(q.locator(".katex").first()).toBeVisible(); // equations rendered by KaTeX
-  await q.getByRole("textbox").fill("19");
+  // 15 + 4 = □□ : two one-digit boxes, typing moves to the next box
+  await expect(q.getByRole("textbox")).toHaveCount(2);
+  await q.getByRole("textbox").first().click();
+  await page.keyboard.type("19");
+  await expect(q.getByRole("textbox").nth(1)).toHaveValue("9");
   await page.getByRole("button", { name: "다음 →" }).click();
   await expect(page.getByRole("button", { name: /^2 \// })).toBeVisible();
-  await q.getByRole("textbox").fill("30"); // 22 + 7 → wrong on purpose
+  await q.getByRole("textbox").first().click();
+  await page.keyboard.type("30"); // 22 + 7 → wrong on purpose
   await page.getByRole("button", { name: "다음 →" }).click();
   await expect(page.getByRole("button", { name: /^3 \// })).toBeVisible();
 

@@ -59,7 +59,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "19"
+                  "answer": "19",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -85,7 +86,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "29"
+                  "answer": "29",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -111,7 +113,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "68"
+                  "answer": "68",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -137,7 +140,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "38"
+                  "answer": "38",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -163,7 +167,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "30"
+                  "answer": "30",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -189,7 +194,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "31"
+                  "answer": "31",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -215,7 +221,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "27"
+                  "answer": "27",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -241,7 +248,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "44"
+                  "answer": "44",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -267,7 +275,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "35"
+                  "answer": "35",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -293,7 +302,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "33"
+                  "answer": "33",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -639,7 +649,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "82"
+                  "answer": "82",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -665,7 +676,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "82"
+                  "answer": "82",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -691,7 +703,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "76"
+                  "answer": "76",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -717,7 +730,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "94"
+                  "answer": "94",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -743,7 +757,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "62"
+                  "answer": "62",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -769,7 +784,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "98"
+                  "answer": "98",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -795,7 +811,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "97"
+                  "answer": "97",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -821,7 +838,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "63"
+                  "answer": "63",
+                  "digits": 2
                 }
               ],
               "grading": "auto",
@@ -847,7 +865,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "102"
+                  "answer": "102",
+                  "digits": 3
                 }
               ],
               "grading": "auto",
@@ -873,7 +892,8 @@
                 {
                   "id": "b1",
                   "kind": "int",
-                  "answer": "105"
+                  "answer": "105",
+                  "digits": 3
                 }
               ],
               "grading": "auto",

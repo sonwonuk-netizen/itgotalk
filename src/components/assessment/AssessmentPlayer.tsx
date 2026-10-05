@@ -151,7 +151,16 @@ export function AssessmentPlayer({ attemptId, title, questions, initialAnswers }
               ) : g.t === "html" ? (
                 <span key={i} dangerouslySetInnerHTML={{ __html: g.html }} />
               ) : (
-                <BlankInput
+                g.digits && g.digits > 1 ? (
+                  <DigitBoxes
+                    key={g.id + q.id}
+                    count={g.digits}
+                    value={a[g.id] ?? ""}
+                    onChange={(v) => setBlank(g.id, v)}
+                    onEnter={() => void (isLast ? undefined : go(index + 1))}
+                    label={`${q.no}번 답`}
+                  />
+                ) : <BlankInput
                   key={g.id + q.id}
                   kind={g.kind}
                   free={q.type === "free"}
@@ -282,5 +291,50 @@ function ChoiceGroup({ choices, value, onChange }: { choices: { value: string; h
         </button>
       ))}
     </div>
+  );
+}
+
+/**
+ * One box per digit (e.g. 57 + 25 = [8][2]). Typing moves to the next box; Backspace on an
+ * empty box moves back. The value is the digits joined left to right.
+ */
+function DigitBoxes({ count, value, onChange, onEnter, label }: {
+  count: number; value: string; onChange: (v: string) => void; onEnter: () => void; label: string;
+}) {
+  const refs = useRef<(HTMLInputElement | null)[]>([]);
+  const cells = Array.from({ length: count }, (_, i) => value[i] ?? "");
+  const set = (i: number, d: string) => {
+    const next = [...cells];
+    next[i] = d;
+    // keep positions: an empty box stays empty (space) so later digits do not shift left
+    onChange(next.map((c) => c || " ").join("").trimEnd());
+  };
+  return (
+    <span className="inline-flex gap-1.5" role="group" aria-label={label}>
+      {cells.map((c, i) => (
+        <input
+          key={i}
+          ref={(el) => { refs.current[i] = el; }}
+          aria-label={`${label} ${count - i === 1 ? "일의 자리" : count - i === 2 ? "십의 자리" : count - i === 3 ? "백의 자리" : `${i + 1}번째 칸`}`}
+          value={c.trim()}
+          inputMode="numeric"
+          autoComplete="off"
+          maxLength={1}
+          onFocus={(e) => e.currentTarget.select()}
+          onChange={(e) => {
+            const d = e.target.value.replace(/D/g, "").slice(-1);
+            set(i, d);
+            if (d && i < count - 1) refs.current[i + 1]?.focus();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Backspace" && !c.trim() && i > 0) refs.current[i - 1]?.focus();
+            else if (e.key === "ArrowLeft" && i > 0) refs.current[i - 1]?.focus();
+            else if (e.key === "ArrowRight" && i < count - 1) refs.current[i + 1]?.focus();
+            else if (e.key === "Enter") onEnter();
+          }}
+          className="h-14 w-12 rounded-xl border-2 border-brand-300 bg-brand-50/40 text-center text-3xl font-bold text-brand-700 outline-none focus:border-brand-600 focus:bg-white"
+        />
+      ))}
+    </span>
   );
 }

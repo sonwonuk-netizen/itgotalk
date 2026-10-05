@@ -125,7 +125,8 @@ def part(title, items, timed=False):
 
 
 def add_rows(pairs, tag):
-    return [item(CIRCLED[i], f"${a} + {b} =$ [[b1]]", [blank("b1", a + b)], tags=[tag]) for i, (a, b) in enumerate(pairs)]
+    # one input box per digit of the answer (연산 테스트 덧셈)
+    return [item(CIRCLED[i], f"${a} + {b} =$ [[b1]]", [blank("b1", a + b, digits=len(str(a + b)))], tags=[tag]) for i, (a, b) in enumerate(pairs)]
 
 
 def missing_add_rows(pairs, tag):
