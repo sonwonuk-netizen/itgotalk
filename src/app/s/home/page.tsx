@@ -5,6 +5,7 @@ import { startTrackAction } from "../actions";
 import { StudentHeader } from "@/components/StudentHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { LinkButton, buttonClass } from "@/components/ui";
+import type { StageStatus } from "@/lib/content/stages";
 
 export const dynamic = "force-dynamic";
 
@@ -31,9 +32,11 @@ function TrackCard({ t }: { t: TrackHome }) {
         {t.track.icon && <img src={t.track.icon} alt="" className="h-12 w-12" />}
         <div className="flex-1">
           <div className="text-sm font-semibold text-gray-500">{t.track.name}</div>
-          {t.started && <div className="text-sm text-gray-500">통과한 단계 {t.passedCount} / {t.totalSkills}</div>}
+          {t.started && <div className="text-sm text-gray-500">통과 {t.passedCount} / {t.totalSkills}</div>}
         </div>
       </div>
+
+      {t.stages && <StageButtons trackId={t.track.id} stages={t.stages} />}
 
       {t.review && (
         <div className="mb-4 flex flex-wrap items-center gap-4 rounded-2xl bg-sun-100 p-4 ring-2 ring-sun-400">
@@ -104,5 +107,37 @@ function TrackCard({ t }: { t: TrackHome }) {
         </div>
       )}
     </section>
+  );
+}
+
+const STAGE_STYLE: Record<StageStatus, { className: string; label: string }> = {
+  done: { className: "bg-emerald-50 text-emerald-800 ring-emerald-300", label: "통과 ✅" },
+  current: { className: "bg-brand-600 text-white ring-brand-600", label: "공부 중" },
+  open: { className: "bg-brand-50 text-brand-700 ring-brand-200", label: "이어서" },
+  locked: { className: "bg-gray-50 text-gray-500 ring-gray-200", label: "🔒" },
+  soon: { className: "bg-gray-50 text-gray-400 ring-gray-200", label: "준비 중" },
+};
+
+/** 1단계~8단계 buttons; each opens that stage's skills to learn one by one. */
+function StageButtons({ trackId, stages }: { trackId: string; stages: NonNullable<TrackHome["stages"]> }) {
+  return (
+    <nav aria-label="단계" className="mb-5 grid grid-cols-4 gap-2 sm:grid-cols-8">
+      {stages.map((s) => {
+        const style = STAGE_STYLE[s.status];
+        return (
+          <a
+            key={s.no}
+            href={`/s/stage/${trackId}/${s.no}`}
+            data-stage={s.no}
+            data-status={s.status}
+            title={`${s.no}단계 · ${s.name}`}
+            className={`flex min-h-20 flex-col items-center justify-center rounded-2xl px-1 text-center ring-2 transition hover:-translate-y-0.5 hover:shadow ${style.className}`}
+          >
+            <span className="text-lg font-black">{s.no}단계</span>
+            <span className="text-xs font-semibold opacity-90">{style.label}</span>
+          </a>
+        );
+      })}
+    </nav>
   );
 }
