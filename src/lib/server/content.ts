@@ -7,6 +7,7 @@ export type SkillPattern = "intro" | "intuition" | "commutative" | "complement10
 
 export interface SkillInfo extends SkillRule {
   trackId: string;
+  book: string;
   pattern: SkillPattern;
   hint: string;
   setIds: string[];
@@ -42,10 +43,10 @@ export interface DbItem {
 /** Skills in order; pass a track id to get only that track's progression. */
 export async function loadSkills(tx: Tx, trackId?: string): Promise<SkillInfo[]> {
   const { rows } = await tx.query<{
-    id: string; ord: number; name: string; hint: string | null; time_rule: TimeRule; track_id: string; pattern: SkillPattern;
+    id: string; ord: number; name: string; hint: string | null; time_rule: TimeRule; track_id: string; book: string; pattern: SkillPattern;
     time_limit_sec: string | number; practice_required: number; set_ids: string[] | null;
   }>(
-    `select k.id, k.ord, k.name, k.hint, k.time_rule, k.time_limit_sec, k.practice_required, k.track_id, k.pattern,
+    `select k.id, k.ord, k.name, k.hint, k.time_rule, k.time_limit_sec, k.practice_required, k.track_id, k.book, k.pattern,
             (select json_group_array(s.id) from (select id from item_sets where skill_id = k.id order by ord) s) as set_ids
      from skills k
      where ($1 is null or k.track_id = $1)
@@ -57,6 +58,7 @@ export async function loadSkills(tx: Tx, trackId?: string): Promise<SkillInfo[]>
     ord: r.ord,
     name: r.name,
     trackId: r.track_id,
+    book: r.book,
     pattern: r.pattern,
     hint: r.hint ?? "",
     timeRule: r.time_rule,
