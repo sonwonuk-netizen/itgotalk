@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "대표 프로그램" };
 export default function ProgramPage() {
   return (
     <>
-      <SubHero title="대표 프로그램" subtitle="아이들이 수학을 읽고, 말하고, 쓰는 경험" image="/site/banner-b.jpg" />
+      <SubHero title="대표 프로그램" subtitle="아이들이 수학을 읽고, 말하고, 쓰는 경험" image="/site/banner-b.webp" />
       <Section>
         <p className="mx-auto max-w-3xl text-center text-xl leading-relaxed text-gray-800">
           ‘글을 쓰는 아이들’은 아이들이 수학을 직접 말하고, 책으로 써보는 경험을 통해 수학을 더 깊이 이해하고 재미있게 배울 수 있도록 설립된 교육회사입니다.
@@ -16,7 +16,7 @@ export default function ProgramPage() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-2">
           <article className="overflow-hidden rounded-3xl bg-site-cream">
-            <img src="/site/photo-classroom.jpg" alt="" className="h-56 w-full object-cover" />
+            <img src="/site/photo-classroom.webp" alt="" className="h-56 w-full object-cover" />
             <div className="space-y-3 p-6">
               <h2 className="text-2xl font-black">수학을 읽고 말하기</h2>
               <p className="font-semibold text-site-teal-dark">&quot;분수의 곱셈은 왜 분자끼리, 분모끼리 곱할까?&quot;<br />&quot;달까지의 거리는 어떻게 측정한 걸까?&quot;</p>
@@ -25,7 +25,7 @@ export default function ProgramPage() {
             </div>
           </article>
           <article className="overflow-hidden rounded-3xl bg-site-purple/10">
-            <img src="/site/photo-board.jpg" alt="" className="h-56 w-full object-cover" />
+            <img src="/site/photo-board.webp" alt="" className="h-56 w-full object-cover" />
             <div className="space-y-3 p-6">
               <h2 className="text-2xl font-black">과정수학</h2>
               <p className="text-gray-700">기초 연산이 부족한 아이들을 위한 연산 중심 보완 프로그램</p>

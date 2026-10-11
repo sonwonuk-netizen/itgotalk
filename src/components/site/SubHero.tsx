@@ -1,5 +1,5 @@
 /** Sub-page banner in the style of ilgotalk.com: wide photo with a title on top. */
-export function SubHero({ title, subtitle, image = "/site/banner-a.jpg" }: { title: string; subtitle?: string; image?: string }) {
+export function SubHero({ title, subtitle, image = "/site/banner-a.webp" }: { title: string; subtitle?: string; image?: string }) {
   return (
     <section className="relative overflow-hidden bg-site-teal">
       {/* eslint-disable-next-line @next/next/no-img-element */}

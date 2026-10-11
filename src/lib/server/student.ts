@@ -23,17 +23,23 @@ export interface TrackHome {
 /** Everything the student home needs, per track, read under the student's own RLS scope. */
 export async function loadStudentHome(studentId: string) {
   return asUser(studentId, async (tx) => {
-    const tracks = await loadTracks(tx);
-    const skills = await loadSkills(tx);
-    const progress = new Map((await loadProgress(tx, studentId)).map((p) => [p.skillId, p]));
-    const orgName = (await tx.query<{ name: string }>(
-      "select o.name from organizations o join profiles p on p.organization_id = o.id where p.id = $1",
-      [studentId],
-    )).rows[0]?.name ?? null;
-    const { rows: reviews } = await tx.query<{ set_id: string; skill_id: string }>(
-      "select set_id, skill_id from review_assignments where student_id = $1 and completed_at is null order by created_at desc",
-      [studentId],
-    );
+    // Independent reads in parallel: on Cloudflare each one is a round trip to D1.
+    const [tracks, skills, progressRows, orgRows, reviewRows] = await Promise.all([
+      loadTracks(tx),
+      loadSkills(tx),
+      loadProgress(tx, studentId),
+      tx.query<{ name: string }>(
+        "select o.name from organizations o join profiles p on p.organization_id = o.id where p.id = $1",
+        [studentId],
+      ),
+      tx.query<{ set_id: string; skill_id: string }>(
+        "select set_id, skill_id from review_assignments where student_id = $1 and completed_at is null order by created_at desc",
+        [studentId],
+      ),
+    ]);
+    const progress = new Map(progressRows.map((p) => [p.skillId, p]));
+    const orgName = orgRows.rows[0]?.name ?? null;
+    const reviews = reviewRows.rows;
 
     const perTrack: TrackHome[] = tracks.map((track) => {
       const trackSkills = skills.filter((s) => s.trackId === track.id);

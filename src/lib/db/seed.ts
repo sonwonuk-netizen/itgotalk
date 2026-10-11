@@ -167,6 +167,8 @@ export async function createUser(
     schoolId?: string | null;
     organizationId?: string | null;
     approved: boolean;
+    contactEmail?: string | null;
+    contactPhone?: string | null;
   },
 ): Promise<string> {
   const { rows } = await tx.query<{ id: string }>(
@@ -175,9 +177,9 @@ export async function createUser(
   );
   const id = rows[0]!.id;
   await tx.query(
-    `insert into profiles (id, role, display_initial, full_name, grade, school_id, organization_id, is_approved)
-     values ($1,$2,$3,$4,$5,$6,$7,$8)`,
-    [id, u.role, u.initial, u.fullName ?? null, u.grade ?? null, u.schoolId ?? null, u.organizationId ?? null, u.approved],
+    `insert into profiles (id, role, display_initial, full_name, grade, school_id, organization_id, is_approved, contact_email, contact_phone)
+     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+    [id, u.role, u.initial, u.fullName ?? null, u.grade ?? null, u.schoolId ?? null, u.organizationId ?? null, u.approved, u.contactEmail ?? null, u.contactPhone ?? null],
   );
   return id;
 }
@@ -200,7 +202,7 @@ export async function seedDemoData(tx: Tx): Promise<void> {
   await tx.query("insert into schools (region_id, name, level) values ($1, '용문초등학교', 'elementary')", [yp]);
   await tx.query("insert into schools (region_id, name, level) values ($1, '대치초등학교', 'elementary')", [gn]);
 
-  const org = await one("insert into organizations (name, kind, invite_code) values ('잇고 수학학원', 'academy', 'ITGO2026') returning id");
+  const org = await one("insert into organizations (name, kind, invite_code, school_id) values ('잇고 수학학원', 'academy', 'ITGO2026', $1) returning id", [ypSchool]);
   await one("insert into organizations (name, kind, invite_code) values ('햇살 공부방', 'study_room', 'SUNNY001') returning id");
 
   await createUser(tx, { loginId: "admin", password: "admin1234", role: "admin", initial: "관리", fullName: "본사 관리자", approved: true });

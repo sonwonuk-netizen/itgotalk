@@ -1,6 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { asService } from "@/lib/db/client";
 
@@ -57,7 +58,8 @@ async function sessionUserId(): Promise<string | null> {
   return id;
 }
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+/** Once per request: the header and the page both ask, and each lookup is a database round trip. */
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const id = await sessionUserId();
   if (!id) return null;
   const { rows } = await asService((tx) =>
@@ -76,7 +78,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     organizationId: p.organization_id,
     approved: p.is_approved,
   };
-}
+});
 
 export function homeFor(role: Role): string {
   if (role === "student") return "/s/home";

@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { d1Db, type D1Like } from "./d1";
 import { scopeSql, type ScopeUser } from "./scope";
@@ -47,16 +48,21 @@ function scoped(db: Db, user: ScopeUser | null): Tx {
  * Runs `fn` with reads limited to what the given user may see (src/lib/db/scope.ts) — the
  * same rules RLS enforced on Postgres. Read-only: write with asService after a permission check.
  */
-export async function asUser<T>(userId: string, fn: (tx: Tx) => Promise<T>): Promise<T> {
+/** Who the scope rules apply to; looked up once per request (each lookup is a D1 round trip). */
+const scopeUser = cache(async (userId: string): Promise<ScopeUser> => {
   const db = await getDb();
   const p = (await db.query<{ role: ScopeUser["role"]; organization_id: string | null; is_approved: boolean }>(
     "select role, organization_id, is_approved from profiles where id = $1",
     [userId],
   )).rows[0];
-  const user: ScopeUser = p
+  return p
     ? { id: userId, role: p.role, organizationId: p.organization_id, approved: p.is_approved }
     : { id: userId, role: "student", organizationId: null, approved: false };
-  return fn(scoped(db, user));
+});
+
+export async function asUser<T>(userId: string, fn: (tx: Tx) => Promise<T>): Promise<T> {
+  const db = await getDb();
+  return fn(scoped(db, await scopeUser(userId)));
 }
 
 /** Read-only access as a signed-out visitor (signup lists, track list). */

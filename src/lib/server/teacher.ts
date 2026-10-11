@@ -12,11 +12,11 @@ export async function unreadAlertCount(userId: string): Promise<number> {
 export async function listStudents(userId: string) {
   return asUser(userId, async (tx) => {
     const { rows } = await tx.query<{
-      id: string; display_initial: string; grade: number | null; school: string | null; current_skills: string | null;
+      id: string; display_initial: string; full_name: string | null; grade: number | null; school: string | null; current_skills: string | null;
       last_at: Date | null; last_mode: string | null; last_elapsed: number | null; last_passed: boolean | null;
       consecutive_fail: number | null; open_alerts: number;
     }>(
-      `select p.id, p.display_initial, p.grade, sc.name as school,
+      `select p.id, p.display_initial, p.full_name, p.grade, sc.name as school,
               -- one current skill per track
               (select group_concat(c.label, ', ') from (
                  select k.name || ' · 세트 ' || s.ord as label
@@ -41,8 +41,8 @@ export interface WrongItem { a: number; op: Op; b: number; blank: Blank; answer:
 
 export async function loadStudentDetail(userId: string, studentId: string) {
   return asUser(userId, async (tx) => {
-    const { rows: prof } = await tx.query<{ id: string; display_initial: string; grade: number | null; school: string | null; org: string | null; phone: string | null; created_at: Date }>(
-      `select p.id, p.display_initial, p.grade, sc.name as school, o.name as org, g.phone, p.created_at
+    const { rows: prof } = await tx.query<{ id: string; display_initial: string; full_name: string | null; grade: number | null; school: string | null; org: string | null; phone: string | null; created_at: Date }>(
+      `select p.id, p.display_initial, p.full_name, p.grade, sc.name as school, o.name as org, g.phone, p.created_at
        from profiles p left join schools sc on sc.id = p.school_id
        left join organizations o on o.id = p.organization_id
        left join guardians g on g.student_id = p.id

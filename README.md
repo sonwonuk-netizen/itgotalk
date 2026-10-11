@@ -13,7 +13,8 @@ pnpm dev            # http://localhost:3000  (첫 실행 시 DB 생성 + content
 | `director` | `teach1234` | 원장 (교사 승인, 초대코드) |
 | `admin` | `admin1234` | 본사 관리자 |
 
-학생 가입 초대 코드: `ITGO2026` (다른 기관 접근 규칙 확인용: `SUNNY001`)
+학생 가입: 경기 양평군 → 양평초등학교를 고르면 잇고 수학학원으로 소속 (초대 코드 없음; 기관–학교 연결은 본사 /admin/orgs).
+선생님 가입 기관 코드: `ITGO2026` (다른 기관 접근 규칙 확인용: `SUNNY001`)
 
 ```bash
 pnpm test           # 엔진 T1~T12 + 콘텐츠 검증 + 접근 규칙(rls.test) + 서버 훈련 루프

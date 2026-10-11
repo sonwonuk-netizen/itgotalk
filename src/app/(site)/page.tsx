@@ -7,10 +7,10 @@ export default function SiteHome() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-site-purple">
-        <img src="/site/hero-bg.jpg" alt="" className="absolute inset-0 hidden h-full w-full object-cover object-right md:block" />
-        <img src="/site/hero-mobile.png" alt="" className="absolute inset-x-0 bottom-0 mx-auto w-[70%] max-w-sm md:hidden" />
+        <img src="/site/hero-bg.webp" alt="" className="absolute inset-0 hidden h-full w-full object-cover object-right md:block" />
+        <img src="/site/hero-mobile.webp" alt="" className="absolute inset-x-0 bottom-0 mx-auto w-[70%] max-w-sm md:hidden" />
         <div className="relative mx-auto flex min-h-[420px] max-w-7xl flex-col justify-center px-4 pb-48 pt-10 sm:px-6 md:min-h-[560px] md:pb-10">
-          <img src="/site/hero-title.png" alt="수학" className="w-44 sm:w-64 md:w-80" />
+          <img src="/site/hero-title.webp" alt="수학" className="w-44 sm:w-64 md:w-80" />
           <p className="mt-6 text-lg font-bold text-white sm:text-2xl">읽고 말하는 재미있는</p>
           <p className="mt-1 max-w-md text-white/90 sm:text-lg">
             &quot;글을 쓰는 아이들&quot;은 아이들이 수학교육을 통해 자신만의 수학책을 작성할 수 있습니다.
@@ -45,14 +45,14 @@ export default function SiteHome() {
 
       {/* 교육이야기 · 교육원 */}
       <section className="relative bg-site-teal py-16">
-        <img src="/site/teal-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+        <img src="/site/teal-bg.webp" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="relative mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
           <div className="text-center text-white">
             <h2 className="text-3xl font-black sm:text-4xl">책을 쓰는 아이들의 교육이야기와 교육원</h2>
             <p className="mt-2 text-lg">&quot;알아가는 재미에 대한 이야기를 나누는 공간입니다.&quot;</p>
           </div>
           <FeatureCard
-            image="/site/card-education.png"
+            image="/site/card-education.webp"
             title="교육이야기"
             lead="“알아가는 재미에 대한 이야기를 나누는 공간입니다.”"
             body={[
@@ -63,7 +63,7 @@ export default function SiteHome() {
             href="/education"
           />
           <FeatureCard
-            image="/site/card-institute.png"
+            image="/site/card-institute.webp"
             title="교육원"
             lead="책을 쓰는 아이들의 교육원에서는 아이들이 수학을 쉽고 재미있게 배우며 성장합니다."
             body={[

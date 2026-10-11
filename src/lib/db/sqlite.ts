@@ -8,7 +8,7 @@
 /** ISO-8601 UTC "now", the same text format as Date.toISOString(). */
 export const NOW = "strftime('%Y-%m-%dT%H:%M:%fZ', 'now')";
 
-const BOOLEAN_COLUMNS = new Set(["is_active", "is_approved", "report_opt_in", "has_diagnostic", "passed", "last_passed", "timed", "correct"]);
+const BOOLEAN_COLUMNS = new Set(["is_active", "is_approved", "report_opt_in", "has_diagnostic", "passed", "last_passed", "timed", "correct", "pinned"]);
 const JSON_COLUMNS = new Set([
   "wrong_items", "lines", "item_order", "set_ids",
   "source", "grading_kinds", "evaluation_template", "stem", "blanks", "choices", "tags",

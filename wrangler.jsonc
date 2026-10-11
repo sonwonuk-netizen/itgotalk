@@ -16,6 +16,16 @@
       "migrations_dir": "migrations"
     }
   ],
+  // 상담신청 → email (src/lib/server/inquiry-notify.ts). Cloudflare Email Routing is enabled on the
+  // notify.itgotalk.com subdomain only (itgotalk.com mail stays on cafe24), and the recipient must be a
+  // verified destination address in Email Routing.
+  "send_email": [{ "name": "INQUIRY_EMAIL", "destination_address": "wonukson@naver.com" }],
+  "vars": {
+    "INQUIRY_EMAIL_FROM": "noreply@notify.itgotalk.com",
+    "INQUIRY_EMAIL_TO": "wonukson@naver.com"
+  },
+  // Run the Worker near D1 when a request makes several database calls (most pages do).
+  "placement": { "mode": "smart" },
   "observability": { "enabled": true }
   // Secrets (set with `wrangler secret put`): SESSION_SECRET, CRON_SECRET
 }

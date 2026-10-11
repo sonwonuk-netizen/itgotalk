@@ -1,6 +1,7 @@
 "use server";
 
 import { asService } from "@/lib/db/client";
+import { notifyInquiry } from "@/lib/server/inquiry-notify";
 
 export type InquiryState = { error?: string; ok?: boolean } | undefined;
 
@@ -17,8 +18,10 @@ export async function submitInquiryAction(_: InquiryState, fd: FormData): Promis
   if (!TOPICS.includes(topic)) return { error: "문의 종류를 골라 주세요." };
   if (message.length < 5 || message.length > 2000) return { error: "문의 내용을 5자 이상 2000자 이하로 적어 주세요." };
   if (fd.get("consent") !== "on") return { error: "개인정보 수집·이용에 동의해 주세요." };
+  const createdAt = new Date();
   await asService((tx) =>
-    tx.query("insert into inquiries (name, phone, topic, message, consent_at) values ($1,$2,$3,$4,$5)", [name, phone, topic, message, new Date()]),
+    tx.query("insert into inquiries (name, phone, topic, message, consent_at) values ($1,$2,$3,$4,$5)", [name, phone, topic, message, createdAt]),
   );
+  await notifyInquiry({ name, phone, topic, message, createdAt });
   return { ok: true };
 }

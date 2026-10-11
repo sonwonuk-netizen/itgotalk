@@ -12,7 +12,7 @@ export function HomeLogo({ size = "md", onClick }: { size?: "sm" | "md"; onClick
       aria-label={`${BRAND} 홈으로`}
       className="inline-flex shrink-0 items-center rounded-xl bg-site-purple px-2.5 py-1.5 hover:bg-site-purple-dark"
     >
-      <img src="/site/logo-white.png" alt={BRAND} className={size === "sm" ? "h-7 w-auto" : "h-9 w-auto"} />
+      <img src="/site/logo-white.webp" alt={BRAND} className={size === "sm" ? "h-7 w-auto" : "h-9 w-auto"} />
     </Link>
   );
 }

@@ -10,12 +10,13 @@ export default async function StudentsPage() {
   return (
     <>
       <PageTitle>학생 목록 <span className="text-base font-normal text-gray-500">({students.length}명)</span></PageTitle>
-      <Table head={["이니셜", "학년·학교", "현재 단계", "최근 기록", "상태"]}>
+      <Table head={["이름", "이니셜", "학년·학교", "현재 단계", "최근 기록", "상태"]}>
         {students.map((s) => (
           <tr key={s.id} className="hover:bg-brand-50">
             <td className={td}>
-              <Link href={`/t/students/${s.id}`} className="font-semibold text-brand-700 hover:underline">{s.display_initial}</Link>
+              <Link href={`/t/students/${s.id}`} className="whitespace-nowrap font-semibold text-brand-700 hover:underline">{s.full_name ?? s.display_initial}</Link>
             </td>
+            <td className={`${td} whitespace-nowrap`}>{s.display_initial}</td>
             <td className={td}>{s.grade ? `${s.grade}학년` : "-"} · {s.school ?? "-"}</td>
             <td className={td}>{s.current_skills ?? <span className="text-gray-400">진단 전 / 완료</span>}</td>
             <td className={td}>
@@ -35,7 +36,7 @@ export default async function StudentsPage() {
           </tr>
         ))}
         {students.length === 0 && (
-          <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">아직 학생이 없어요. 기관 초대 코드를 학생에게 알려 주세요.</td></tr>
+          <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">아직 학생이 없어요. 학생이 가입할 때 우리 기관에 연결된 학교를 고르면 이 목록에 들어와요.</td></tr>
         )}
       </Table>
     </>

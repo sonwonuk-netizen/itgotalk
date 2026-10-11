@@ -18,7 +18,7 @@ export default function InstitutePage() {
       <SubHero
         title="교육원"
         subtitle="책을 쓰는 아이들의 교육원에서는 아이들이 수학을 쉽고 재미있게 배우며 성장 합니다."
-        image="/site/banner-a.jpg"
+        image="/site/banner-a.webp"
       />
       <Section>
         <p className="mx-auto max-w-3xl text-center text-lg text-gray-700">
@@ -35,7 +35,7 @@ export default function InstitutePage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             {["photo-class", "photo-teacher", "photo-group", "photo-classroom"].map((p) => (
-              <img key={p} src={`/site/${p}.jpg`} alt="" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+              <img key={p} src={`/site/${p}.webp`} alt="" className="aspect-[4/3] w-full rounded-2xl object-cover" />
             ))}
           </div>
         </div>

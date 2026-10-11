@@ -18,6 +18,8 @@ export default function TeacherSignupPage() {
         <form action={action} className="space-y-4 rounded-2xl bg-white p-6 shadow">
           <Field label="기관 코드"><input name="inviteCode" className={`${inputClass} uppercase`} required /></Field>
           <Field label="이름"><input name="fullName" className={inputClass} required /></Field>
+          <Field label="이메일 (선택)"><input name="email" type="email" inputMode="email" autoCapitalize="none" autoComplete="email" placeholder="teacher@example.com" maxLength={254} className={inputClass} /></Field>
+          <Field label="휴대폰 (선택)"><input name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="010-1234-5678" maxLength={13} className={inputClass} /></Field>
           <Field label="아이디" hint="영어 소문자·숫자 4~20자"><input name="loginId" autoCapitalize="none" className={inputClass} required /></Field>
           <Field label="비밀번호" hint="8자 이상"><input name="password" type="password" className={inputClass} required /></Field>
           <ErrorText>{state?.error}</ErrorText>

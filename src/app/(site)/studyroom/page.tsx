@@ -31,7 +31,7 @@ export default async function StudyRoomPage() {
 
   return (
     <>
-      <SubHero title="학습자료실" subtitle="일반 적인 학습지와는 차별화된 내용으로 아이들이 쉽고 빠르게 학습합니다." image="/site/banner-c.jpg" />
+      <SubHero title="학습자료실" subtitle="일반 적인 학습지와는 차별화된 내용으로 아이들이 쉽고 빠르게 학습합니다." image="/site/banner-c.webp" />
 
       <Section>
         <div className="flex flex-col items-start gap-4 rounded-3xl bg-site-cream p-6 sm:flex-row sm:items-center sm:p-8">
@@ -39,7 +39,7 @@ export default async function StudyRoomPage() {
             {!user && (
               <>
                 <h2 className="text-2xl font-black">책을쓰는 아이들 연산 훈련</h2>
-                <p className="mt-1 text-gray-700">학원·공부방에서 받은 초대 코드로 가입하고 시작해요.</p>
+                <p className="mt-1 text-gray-700">다니는 학교를 고르면 함께 공부하는 학원·공부방으로 바로 가입돼요.</p>
               </>
             )}
             {user?.role === "student" && (

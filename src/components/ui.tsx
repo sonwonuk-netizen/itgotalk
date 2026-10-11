@@ -60,9 +60,13 @@ export function Badge({ tone = "gray", children }: { tone?: "gray" | "green" | "
 
 /** Initial avatar shown on student screens instead of a real name (rule 5). */
 export function Avatar({ initial, size = "md" }: { initial: string; size?: "md" | "lg" }) {
-  const s = size === "lg" ? "h-16 w-16 text-2xl" : "h-11 w-11 text-lg";
+  // A circle for 1–3 characters; longer initials (up to 6) grow into a pill with a smaller font.
+  const long = [...initial].length > 3;
+  const s = size === "lg"
+    ? `h-16 min-w-16 px-3 ${long ? "text-lg" : "text-2xl"}`
+    : `h-11 min-w-11 px-2 ${long ? "text-sm" : "text-lg"}`;
   return (
-    <span aria-label={`이니셜 ${initial}`} className={`inline-flex shrink-0 items-center justify-center rounded-full bg-sun-400 font-bold text-gray-900 ${s}`}>
+    <span aria-label={`이니셜 ${initial}`} className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-sun-400 font-bold text-gray-900 ${s}`}>
       {initial}
     </span>
   );

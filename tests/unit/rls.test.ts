@@ -80,6 +80,7 @@ describe("RLS: content and anonymous access", () => {
     expect(total).toBeGreaterThanOrEqual(174);
     expect(await count(ids.student1!, "select id from items")).toBe(total);
     expect(await count(null, "select id from regions")).toBeGreaterThan(0);
+    expect(await count(null, "select id from posts where board = 'education'")).toBe(1); // boards are public (one seeded story)
     await expect(count(null, "select id from items")).rejects.toThrow(/permission denied/);
     await expect(count(null, "select id from profiles")).rejects.toThrow(/permission denied/);
   });
@@ -141,6 +142,7 @@ describe("scoped queries: rule plumbing", () => {
   it("cannot reach real tables through main.<table> or read credentials", async () => {
     await expect(count(ids.otherTeacher!, "select id from main.profiles")).rejects.toThrow(/permission denied/);
     await expect(count(ids.admin!, "select id from user_credentials")).rejects.toThrow(/permission denied/);
+    await expect(count(ids.admin!, "select day from site_visitors_daily")).rejects.toThrow(/permission denied/);
   });
 
   it("teacher screens only return the teacher's own organization", async () => {

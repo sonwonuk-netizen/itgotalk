@@ -23,12 +23,12 @@ const lit = (v: string | null) => (v === null ? "null" : `'${v.replaceAll("'", "
 /** Tables anyone may read in full (content and signup lists). */
 const PUBLIC_FOR_USERS = new Set([
   "regions", "schools", "tracks", "skills", "item_sets", "items", "skill_explanations",
-  "assessments", "assessment_parts",
+  "assessments", "assessment_parts", "posts",
 ]);
-const PUBLIC_FOR_ANON = new Set(["regions", "schools", "tracks"]);
+const PUBLIC_FOR_ANON = new Set(["regions", "schools", "tracks", "posts"]);
 
 /** Never readable through a scoped query. */
-const DENIED = new Set(["user_credentials", "_migrations", "d1_migrations"]);
+const DENIED = new Set(["user_credentials", "_migrations", "d1_migrations", "site_visitors_daily", "site_page_views_daily"]);
 
 function userRules(u: ScopeUser): Record<string, string> {
   const U = lit(u.id);

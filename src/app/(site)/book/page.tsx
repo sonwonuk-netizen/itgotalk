@@ -6,15 +6,15 @@ import { Section, SubHero } from "@/components/site/SubHero";
 export const metadata: Metadata = { title: "출판도서" };
 
 const BOOKS = [
-  { title: "읽고 말하는 수학(3)", image: "/site/book-3.jpg" },
-  { title: "읽고 말하는 수학(2)", image: "/site/book-2.jpg" },
-  { title: "읽고 말하는 수학(1)", image: "/site/book-1.jpg" },
+  { title: "읽고 말하는 수학(3)", image: "/site/book-3.webp" },
+  { title: "읽고 말하는 수학(2)", image: "/site/book-2.webp" },
+  { title: "읽고 말하는 수학(1)", image: "/site/book-1.webp" },
 ];
 
 export default function BookPage() {
   return (
     <>
-      <SubHero title="출판도서" subtitle="읽고 말하며 알아가는 재미를 느끼는 수학" image="/site/banner-c.jpg" />
+      <SubHero title="출판도서" subtitle="읽고 말하며 알아가는 재미를 느끼는 수학" image="/site/banner-c.webp" />
       <Section>
         <div className="grid gap-8 sm:grid-cols-3">
           {BOOKS.map((b) => (

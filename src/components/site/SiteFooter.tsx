@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="bg-[#363636] text-gray-300">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 text-sm sm:px-6 md:grid-cols-[auto_1fr]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/site/logo-white.png" alt={BRAND} className="h-12 w-auto" />
+        <img src="/site/logo-white.webp" alt={BRAND} className="h-12 w-auto" />
         <div className="space-y-1 md:text-right">
           <p>
             <a href="https://ilgotalk.com/?mode=privacy" target="_blank" rel="noreferrer" className="font-semibold text-white hover:underline">개인정보처리방침</a>

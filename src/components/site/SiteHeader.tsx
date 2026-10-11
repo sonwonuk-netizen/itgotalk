@@ -10,7 +10,7 @@ export async function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:h-20 sm:px-6">
         <Link href="/" className="shrink-0" aria-label={`${BRAND} 홈`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/site/logo-white.png" alt={BRAND} className="h-10 w-auto sm:h-12" />
+          <img src="/site/logo-white.webp" alt={BRAND} className="h-10 w-auto sm:h-12" />
         </Link>
 
         <nav className="ml-auto hidden items-center gap-1 xl:flex" aria-label="주 메뉴">

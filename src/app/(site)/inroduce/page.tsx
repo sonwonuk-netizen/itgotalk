@@ -23,7 +23,7 @@ const STORY = [
 export default function IntroducePage() {
   return (
     <>
-      <SubHero title="책을 쓰는 아이들" subtitle="아이들이 수학을 읽고, 말하고, 쓰는 경험" image="/site/banner-a.jpg" />
+      <SubHero title="책을 쓰는 아이들" subtitle="아이들이 수학을 읽고, 말하고, 쓰는 경험" image="/site/banner-a.webp" />
       <Section>
         <p className="mx-auto max-w-3xl text-center text-xl leading-relaxed text-gray-800">
           ‘글을 쓰는 아이들’은 아이들이 수학을 직접 말하고, 책으로 써보는 경험을 통해 수학을 더 깊이 이해하고 재미있게 배울 수 있도록 설립된 교육회사입니다.
@@ -34,14 +34,14 @@ export default function IntroducePage() {
             <p className="pt-2 font-bold text-gray-900">- 책을 쓰는 아이들 대표 -</p>
           </div>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-1">
-            <img src="/site/note-1.jpg" alt="아이가 쓴 수학 노트" className="rounded-2xl shadow" />
-            <img src="/site/note-2.jpg" alt="아이가 쓴 수학 노트" className="rounded-2xl shadow" />
+            <img src="/site/note-1.webp" alt="아이가 쓴 수학 노트" className="rounded-2xl shadow" />
+            <img src="/site/note-2.webp" alt="아이가 쓴 수학 노트" className="rounded-2xl shadow" />
           </div>
         </div>
       </Section>
       <section className="grid grid-cols-2 gap-1 md:grid-cols-4">
         {["photo-girl", "photo-pair", "photo-boy", "photo-board"].map((p) => (
-          <img key={p} src={`/site/${p}.jpg`} alt="" className="aspect-[4/3] w-full object-cover" />
+          <img key={p} src={`/site/${p}.webp`} alt="" className="aspect-[4/3] w-full object-cover" />
         ))}
       </section>
     </>

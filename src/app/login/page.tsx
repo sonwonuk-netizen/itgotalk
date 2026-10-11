@@ -12,7 +12,7 @@ export default function LoginPage() {
         <div className="text-center">
           <Link href="/" className="inline-block rounded-2xl bg-site-purple px-5 py-3" aria-label="책을 쓰는 아이들 홈">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/site/logo-white.png" alt="책을 쓰는 아이들" className="h-12 w-auto" />
+            <img src="/site/logo-white.webp" alt="책을 쓰는 아이들" className="h-12 w-auto" />
           </Link>
           <p className="mt-3 text-lg font-bold text-gray-700">학습자료실 · 연산 훈련</p>
           <p className="text-gray-600">매일 조금씩, 한 단계씩 올라가는 연산</p>
@@ -38,7 +38,7 @@ export default function LoginPage() {
                 ))}
               </tbody>
             </table>
-            <p className="mt-2">초대 코드: <span className="font-mono">ITGO2026</span></p>
+            <p className="mt-2">학생 가입: 경기 양평군 → 양평초등학교 → 잇고 수학학원 · 선생님 가입 기관 코드: <span className="font-mono">ITGO2026</span></p>
           </details>
         )}
       </div>

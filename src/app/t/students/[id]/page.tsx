@@ -25,7 +25,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
       <PageTitle
         actions={<LinkButton href={`/t/students/${id}/print`} tone="secondary" size="sm">출력 / PDF</LinkButton>}
       >
-        {d.student.display_initial}{" "}
+        {d.student.full_name ? `${d.student.full_name} (${d.student.display_initial})` : d.student.display_initial}{" "}
         <span className="text-base font-normal text-gray-500">
           {d.student.grade ? `${d.student.grade}학년` : ""} · {d.student.school ?? ""} · 학부모 {maskPhone(d.student.phone)}
         </span>
