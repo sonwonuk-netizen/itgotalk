@@ -150,4 +150,15 @@ describe("scoped queries: rule plumbing", () => {
     expect(await loadStudentDetail(ids.otherTeacher!, ids.student2!)).toBeNull();
     expect((await loadStudentDetail(ids.teacher!, ids.student2!))?.attempts.length).toBeGreaterThan(0);
   });
+
+  it("only an approved org admin gets login IDs, and only for their own students", async () => {
+    const { listStudentLoginIds } = await import("@/lib/server/teacher");
+    const own = (await db.query<{ id: string }>("select organization_id as id from profiles where id = $1", [ids.director])).rows[0]!.id;
+    const other = (await db.query<{ id: string }>("select id from organizations where invite_code = 'SUNNY001'")).rows[0]!.id;
+    const director = { role: "org_admin" as const, approved: true, organizationId: own };
+    expect(Object.fromEntries(await listStudentLoginIds(director))).toEqual({ [ids.student1!]: "student1", [ids.student2!]: "student2" });
+    expect((await listStudentLoginIds({ ...director, organizationId: other })).size).toBe(0);
+    expect((await listStudentLoginIds({ ...director, approved: false })).size).toBe(0);
+    expect((await listStudentLoginIds({ ...director, role: "teacher" })).size).toBe(0);
+  });
 });

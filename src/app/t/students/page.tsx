@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { requireStaff } from "@/lib/auth/session";
-import { listStudents } from "@/lib/server/teacher";
+import { listStudentLoginIds, listStudents } from "@/lib/server/teacher";
 import { PageTitle, Table, td } from "@/components/StaffShell";
 import { Badge, MODE_LABEL, formatDateTime, formatSec } from "@/components/ui";
 
 export default async function StudentsPage() {
   const user = await requireStaff();
-  const students = await listStudents(user.id);
+  const [students, loginIds] = await Promise.all([listStudents(user.id), listStudentLoginIds(user)]);
+  const showLoginId = user.role === "org_admin";
   return (
     <>
       <PageTitle>학생 목록 <span className="text-base font-normal text-gray-500">({students.length}명)</span></PageTitle>
-      <Table head={["이니셜", "학년·학교", "현재 단계", "최근 기록", "상태"]}>
+      <Table head={["이니셜", ...(showLoginId ? ["아이디"] : []), "학년·학교", "현재 단계", "최근 기록", "상태"]}>
         {students.map((s) => (
           <tr key={s.id} className="hover:bg-brand-50">
             <td className={td}>
               <Link href={`/t/students/${s.id}`} className="font-semibold text-brand-700 hover:underline">{s.display_initial}</Link>
             </td>
+            {showLoginId && <td className={td}>{loginIds.get(s.id) ?? "-"}</td>}
             <td className={td}>{s.grade ? `${s.grade}학년` : "-"} · {s.school ?? "-"}</td>
             <td className={td}>{s.current_skills ?? <span className="text-gray-400">진단 전 / 완료</span>}</td>
             <td className={td}>
@@ -35,7 +37,7 @@ export default async function StudentsPage() {
           </tr>
         ))}
         {students.length === 0 && (
-          <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">아직 학생이 없어요. 기관 초대 코드를 학생에게 알려 주세요.</td></tr>
+          <tr><td colSpan={showLoginId ? 6 : 5} className="px-4 py-8 text-center text-gray-500">아직 학생이 없어요. 기관 초대 코드를 학생에게 알려 주세요.</td></tr>
         )}
       </Table>
     </>
