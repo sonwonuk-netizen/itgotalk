@@ -1,5 +1,7 @@
 import "server-only";
-import { asUser } from "@/lib/db/client";
+import { emailToLoginId } from "@/lib/auth/password";
+import type { SessionUser } from "@/lib/auth/session";
+import { asService, asUser } from "@/lib/db/client";
 import type { Blank, Op } from "@/lib/content/items";
 import { loadProgress, loadSkills, loadTracks } from "./content";
 
@@ -35,6 +37,23 @@ export async function listStudents(userId: string) {
     );
     return rows;
   });
+}
+
+/**
+ * Login IDs of the org admin's own students (student id → login ID). Credentials are outside every
+ * read scope, so this checks the role here and reads with asService, limited to the admin's organization.
+ * Anyone else gets an empty map.
+ */
+export async function listStudentLoginIds(user: Pick<SessionUser, "role" | "approved" | "organizationId">): Promise<Map<string, string>> {
+  if (user.role !== "org_admin" || !user.approved || !user.organizationId) return new Map();
+  const { rows } = await asService((tx) =>
+    tx.query<{ id: string; email: string }>(
+      `select p.id, u.email from profiles p join user_credentials u on u.id = p.id
+       where p.role = 'student' and p.organization_id = $1`,
+      [user.organizationId],
+    ),
+  );
+  return new Map(rows.map((r) => [r.id, emailToLoginId(r.email)]));
 }
 
 export interface WrongItem { a: number; op: Op; b: number; blank: Blank; answer: number; given: number | null }

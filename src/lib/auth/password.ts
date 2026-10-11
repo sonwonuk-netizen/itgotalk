@@ -21,3 +21,8 @@ export async function verifyPassword(password: string, stored: string): Promise<
 export function loginIdToEmail(loginId: string): string {
   return `${loginId.trim().toLowerCase()}@itgotalk.local`;
 }
+
+/** Inverse of loginIdToEmail: the ID a student types to log in. */
+export function emailToLoginId(email: string): string {
+  return email.replace(/@itgotalk\.local$/, "");
+}
